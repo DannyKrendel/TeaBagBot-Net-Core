@@ -22,7 +22,7 @@ namespace DiscordBot
 
             commands = new CommandService(new CommandServiceConfig
             {
-                CaseSensitiveCommands = false,
+                CaseSensitiveCommands = true,
                 DefaultRunMode = RunMode.Async,
                 LogLevel = LogSeverity.Debug
             });
@@ -51,7 +51,7 @@ namespace DiscordBot
 
         private async Task Client_Log(LogMessage msg)
         {
-            Console.WriteLine($"[{DateTime.Now} at {msg.Source}] {msg.Message}");
+            Log(msg.Source, msg.Message);
         }
 
         private async Task Client_Ready()
@@ -59,9 +59,35 @@ namespace DiscordBot
             await client.SetGameAsync("игру");
         }
 
-        private async Task Client_MessageReceived(SocketMessage arg)
+        private async Task Client_MessageReceived(SocketMessage socketMsg)
         {
-            
+            var userMsg = socketMsg as SocketUserMessage;
+            var context = new SocketCommandContext(client, userMsg);
+
+            if (context.Message == null || context.Message.Content == "")
+                return;
+            if (context.User.IsBot)
+                return;
+
+            int prefixPos = 0;
+
+            if (userMsg.HasStringPrefix("x!", ref prefixPos, StringComparison.CurrentCultureIgnoreCase) == false && 
+                userMsg.HasMentionPrefix(client.CurrentUser, ref prefixPos) == false)
+            {
+                return;
+            }
+
+            var result = await commands.ExecuteAsync(context, prefixPos, null);
+
+            if (result.IsSuccess == false)
+            {
+                Log("Commands", $"Что-то пошло не так с командой. Текст: {context.Message.Content} | Причина ошибки: {result.ErrorReason}");
+            }
+        }
+
+        private void Log(string source, string message)
+        {
+            Console.WriteLine($"[{DateTime.Now} at {source}] {message}");
         }
     }
 }
