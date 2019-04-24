@@ -6,14 +6,16 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Discord.Net" Version="2.0.1" />
+    <None Remove="Config\Token.json" />
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Core\Data\" />
-    <Folder Include="Resources\Database\" />
-    <Folder Include="Resources\Extensions\" />
-    <Folder Include="Resources\Datatypes\" />
+    <PackageReference Include="Discord.Net" Version="2.0.1" />
+    <PackageReference Include="Unity" Version="5.10.3" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Config\" />
   </ItemGroup>
 
 </Project>
