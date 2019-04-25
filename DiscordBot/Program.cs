@@ -1,8 +1,8 @@
 ﻿using System;
+using System.IO;
 using System.Threading.Tasks;
 using DiscordBot.Core;
 using DiscordBot.Core.Entities;
-using DiscordBot.Storage;
 
 namespace DiscordBot
 {
@@ -14,7 +14,7 @@ namespace DiscordBot
 
             var storage = Unity.Resolve<Storage.Interfaces.IDataStorage>();
 
-            var tokenPath = @"C:\Users\Danny\Source\Repos\DiscordBot\DiscordBot\Config\Token";
+            var tokenPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"..\..\..\Config\Token");
 
             var connection = Unity.Resolve<Connection>();
             await connection.ConnectAsync(new BotConfig()
