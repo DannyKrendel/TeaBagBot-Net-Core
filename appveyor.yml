@@ -18,7 +18,15 @@ test_script:
 
     dotnet --version
 
-    .\packages\OpenCover.4.7.922\tools\OpenCover.Console.exe -register:user -target:"C:\Program Files\dotnet\dotnet.exe" "-targetargs:""packages\xunit.runner.console.2.4.1\tools\netcoreapp2.1\xunit.console.dll"" ""DiscordBot.xUnit.Tests\bin\Release\netcoreapp2.1\DiscordBot.xUnit.Tests.dll"" -noshadow -appveyor" -filter:"+[DiscordBot*]* -[DiscordBot*]*Tests.*" -oldStyle -output:opencoverCoverage.xml
+	cd C:\projects\discordbot\packages
+	
+	dir
+
+	cd C:\projects\discordbot\packages\xunit.runner.console.2.4.1\tools
+
+	dir
+
+    .\packages\OpenCover.4.7.922\tools\OpenCover.Console.exe -register:user -target:"C:\Program Files\dotnet\dotnet.exe" "-targetargs:""C:\projects\discordbot\packages\xunit.runner.console.2.4.1\tools\netcoreapp2.1\xunit.console.dll"" ""DiscordBot.xUnit.Tests\bin\Release\netcoreapp2.1\DiscordBot.xUnit.Tests.dll"" -noshadow -appveyor" -filter:"+[DiscordBot*]* -[DiscordBot*]*Tests.*" -oldStyle -output:opencoverCoverage.xml
 
     $coveralls = ".\tools\csmacnz.coveralls.exe"
 
