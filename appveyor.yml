@@ -19,7 +19,7 @@ test_script:
     dotnet --version
 
     cd C:\projects\discordbot\packages
-	
+
     dir
 
     cd C:\projects\discordbot\packages\xunit.runner.console.2.4.1\tools
