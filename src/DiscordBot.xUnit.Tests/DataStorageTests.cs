@@ -31,7 +31,36 @@ namespace DiscordBot.xUnit.Tests
             var actualObj = storage.RestoreObject<string>(expectedKey);
 
             Assert.Equal(expectedObj, actualObj);
-            Assert.Throws<ArgumentException>(() => storage.RestoreObject<string>("doesn't exist"));
+        }
+
+        [Theory]
+        [InlineData("")]
+        [InlineData(null)]
+        public void MemoryStorage_ShouldThrow(string key)
+        {
+            IDataStorage storage = new MemoryStorage();
+
+            Assert.ThrowsAny<Exception>(() => storage.RestoreObject<string>(key));
+        }
+
+        [Theory]
+        [InlineData("", "")]
+        [InlineData("", null)]
+        public void JsonStorage_StoreObject_ShouldThrow(object obj, string key)
+        {
+            var storage = Unity.Resolve<IDataStorage>();
+
+            Assert.ThrowsAny<Exception>(() => storage.StoreObject(obj, key));
+        }
+
+        [Theory]
+        [InlineData("")]
+        [InlineData(null)]
+        public void JsonStorage_RetoreObject_ShouldThrow(string key)
+        {
+            var storage = Unity.Resolve<IDataStorage>();
+
+            Assert.ThrowsAny<Exception>(() => storage.RestoreObject<object>(key));
         }
     }
 }
