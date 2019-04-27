@@ -10,8 +10,10 @@ namespace DiscordBot.Storage.Implementations
 
         public void StoreObject(object obj, string key)
         {
-            if (dictionary.ContainsKey(key)) return;
-            dictionary.Add(key, obj);
+            if (dictionary.ContainsKey(key))
+                dictionary[key] = obj;
+            else
+                dictionary.Add(key, obj);
         }
 
         public T RestoreObject<T>(string key)
