@@ -20,4 +20,7 @@ install:
 build_script:
 - cmd: dotnet build src -c Release
 test_script:
-- ps: OpenCover.Console.exe -register:user -target:"C:/Program Files/dotnet/dotnet.exe" -targetargs:test -filter:"+[DiscordBot*]* -[DiscordBot*]*Tests.*" -output:".\coverage.xml" -oldstyle
+- ps: >-
+    cd src
+
+    OpenCover.Console.exe -register:user -target:"C:/Program Files/dotnet/dotnet.exe" -targetargs:test -filter:"+[DiscordBot*]* -[DiscordBot*]*Tests.*" -output:".\coverage.xml" -oldstyle
