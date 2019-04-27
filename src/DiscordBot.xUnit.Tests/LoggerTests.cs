@@ -11,6 +11,10 @@ namespace DiscordBot.xUnit.Tests
             var logger = Unity.Resolve<ILogger>();
 
             Assert.Throws<ArgumentException>(() => logger.Log(null));
+
+            var ex = Record.Exception(() => logger.Log("test"));
+
+            Assert.Null(ex);
         }
     }
 }
