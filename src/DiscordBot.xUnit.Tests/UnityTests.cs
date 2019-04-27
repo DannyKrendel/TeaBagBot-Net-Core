@@ -1,16 +1,14 @@
 ﻿using Discord.WebSocket;
 using DiscordBot.Core;
 using DiscordBot.Storage.Interfaces;
-using System;
 using Xunit;
-using Xunit.Sdk;
 
 namespace DiscordBot.xUnit.Tests
 {
     public class UnityTests
     {
         [Fact]
-        public void ResolveIDataStorage_ShouldPass()
+        public void ResolveIDataStorage_ShouldWork()
         {
             var storage1 = Unity.Resolve<IDataStorage>();
             var storage2 = Unity.Resolve<IDataStorage>();
@@ -21,7 +19,7 @@ namespace DiscordBot.xUnit.Tests
         }
 
         [Fact]
-        public void ResolveILogger_ShouldPass()
+        public void ResolveILogger_ShouldWork()
         {
             var storage1 = Unity.Resolve<ILogger>();
             var storage2 = Unity.Resolve<ILogger>();
@@ -32,7 +30,7 @@ namespace DiscordBot.xUnit.Tests
         }
 
         [Fact]
-        public void ResolveDiscordSocketClient_ShouldPass()
+        public void ResolveDiscordSocketClient_ShouldWork()
         {
             var storage1 = Unity.Resolve<DiscordSocketClient>();
             var storage2 = Unity.Resolve<DiscordSocketClient>();
@@ -43,7 +41,7 @@ namespace DiscordBot.xUnit.Tests
         }
 
         [Fact]
-        public void ResolveConnection_ShouldPass()
+        public void ResolveConnection_ShouldWork()
         {
             var storage1 = Unity.Resolve<Connection>();
             var storage2 = Unity.Resolve<Connection>();
