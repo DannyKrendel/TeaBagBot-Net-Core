@@ -2,6 +2,7 @@
 using DiscordBot.Storage.Interfaces;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Text;
 using Xunit;
 
@@ -17,12 +18,10 @@ namespace DiscordBot.xUnit.Tests
             Assert.True(storage is JsonStorage);
         }
 
-        [Fact]
-        public void MemoryStorage_ShouldWork()
+        [Theory]
+        [InlineData("", "")]
+        public void MemoryStorage_RestoreObject_ShouldWork(string expectedObj, string expectedKey)
         {
-            string expectedObj = "";
-            string expectedKey = "";
-
             IDataStorage storage = new MemoryStorage();
 
             storage.StoreObject(expectedObj + "some string", expectedKey);
@@ -36,7 +35,7 @@ namespace DiscordBot.xUnit.Tests
         [Theory]
         [InlineData("")]
         [InlineData(null)]
-        public void MemoryStorage_ShouldThrow(string key)
+        public void MemoryStorage_RestoreObject_ShouldThrow(string key)
         {
             IDataStorage storage = new MemoryStorage();
 
@@ -61,6 +60,15 @@ namespace DiscordBot.xUnit.Tests
             var storage = Unity.Resolve<IDataStorage>();
 
             Assert.ThrowsAny<Exception>(() => storage.RestoreObject<object>(key));
+        }
+
+        [Theory]
+        [InlineData("C:/")]
+        public void JsonStorage_RetoreObject_ShouldWork(string key)
+        {
+            var storage = Unity.Resolve<IDataStorage>();
+
+            Assert.True(Path.IsPathFullyQualified(key));
         }
     }
 }
