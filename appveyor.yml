@@ -17,6 +17,8 @@ install:
     nuget install chocolatey
 
     choco install opencover.portable
+
+    choco install codecov
 build_script:
 - cmd: dotnet build src -c Release
 test_script:
@@ -24,3 +26,5 @@ test_script:
     cd src
 
     OpenCover.Console.exe -register:user -target:"C:/Program Files/dotnet/dotnet.exe" -targetargs:test -filter:"+[DiscordBot*]* -[DiscordBot*]*Tests.*" -output:".\coverage.xml" -oldstyle
+
+    .\codecov -f "coverage.xml" -t CODECOV_TOKEN
