@@ -1,5 +1,4 @@
-﻿using System;
-using System.IO;
+﻿using System.IO.Abstractions;
 using DiscordBot.Storage.Interfaces;
 using Newtonsoft.Json;
 
@@ -7,18 +6,25 @@ namespace DiscordBot.Storage.Implementations
 {
     public class JsonStorage : IDataStorage
     {
-        public T RestoreObject<T>(string key)
+        private readonly IFileSystem fileSystem;
+
+        public JsonStorage(IFileSystem fileSystem)
         {
-            var json = File.ReadAllText($"{key}.json");
+            this.fileSystem = fileSystem;
+        }
+
+        public T RestoreObject<T>(string path)
+        {
+            var json = fileSystem.File.ReadAllText($"{path}.json");
             return JsonConvert.DeserializeObject<T>(json);
         }
 
-        public void StoreObject(object obj, string key)
+        public void StoreObject(object obj, string path)
         {
-            var file = $"{key}.json";
-            Directory.CreateDirectory(Path.GetDirectoryName(file));
+            var file = $"{path}.json";
+            fileSystem.Directory.CreateDirectory(fileSystem.Path.GetDirectoryName(file));
             var json = JsonConvert.SerializeObject(obj);
-            File.WriteAllText(file, json);
+            fileSystem.File.WriteAllText(file, json);
         }
     }
 }

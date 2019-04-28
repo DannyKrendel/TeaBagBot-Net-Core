@@ -1,9 +1,9 @@
 ﻿using DiscordBot.Storage.Implementations;
 using DiscordBot.Storage.Interfaces;
 using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Text;
+using System.IO.Abstractions;
+using System.IO.Abstractions.TestingHelpers;
 using Xunit;
 
 namespace DiscordBot.xUnit.Tests
@@ -45,30 +45,51 @@ namespace DiscordBot.xUnit.Tests
         [Theory]
         [InlineData("", "")]
         [InlineData("", null)]
-        public void JsonStorage_StoreObject_ShouldThrow(object obj, string key)
+        public void JsonStorage_StoreObject_ShouldThrow(object obj, string path)
         {
             var storage = Unity.Resolve<IDataStorage>();
 
-            Assert.ThrowsAny<Exception>(() => storage.StoreObject(obj, key));
+            Assert.ThrowsAny<Exception>(() => storage.StoreObject(obj, path));
+        }
+
+        [Theory]
+        [InlineData(@"C:\test", "test", "\"test\"")]
+        public void JsonStorage_StoreObject_ShouldWork(string path, string data, string expected)
+        {
+            var mockFileSystem = new MockFileSystem();
+
+            var storage = new JsonStorage(mockFileSystem);
+
+            storage.StoreObject(data, path);
+
+            Assert.True(Path.IsPathFullyQualified(path));
+            Assert.True(mockFileSystem.FileExists($"{path}.json"));
+            Assert.Equal(mockFileSystem.File.ReadAllText($"{path}.json"), expected);
         }
 
         [Theory]
         [InlineData("")]
         [InlineData(null)]
-        public void JsonStorage_RetoreObject_ShouldThrow(string key)
+        public void JsonStorage_RestoreObject_ShouldThrow(string path)
         {
             var storage = Unity.Resolve<IDataStorage>();
 
-            Assert.ThrowsAny<Exception>(() => storage.RestoreObject<object>(key));
+            Assert.ThrowsAny<Exception>(() => storage.RestoreObject<object>(path));
         }
 
         [Theory]
-        [InlineData("C:/")]
-        public void JsonStorage_RetoreObject_ShouldWork(string key)
+        [InlineData(@"C:\test", "\"test\"", "test")]
+        public void JsonStorage_RestoreObject_ShouldWork(string path, string jsonData, string expected)
         {
-            var storage = Unity.Resolve<IDataStorage>();
+            var mockFileSystem = new MockFileSystem();
+            var mockInputFile = new MockFileData(jsonData);
+            mockFileSystem.AddFile($"{path}.json", mockInputFile);
 
-            Assert.True(Path.IsPathFullyQualified(key));
+            var storage = new JsonStorage(mockFileSystem);
+            var actual = storage.RestoreObject<string>(path);
+
+            Assert.True(Path.IsPathFullyQualified(path));
+            Assert.Equal(expected, actual);
         }
     }
 }

@@ -4,6 +4,8 @@ using DiscordBot.Core;
 using Discord.WebSocket;
 using Unity;
 using Unity.Injection;
+using System.IO;
+using System.IO.Abstractions;
 
 namespace DiscordBot
 {
@@ -29,6 +31,7 @@ namespace DiscordBot
             container.RegisterFactory<DiscordSocketConfig>(x => SocketConfig.GetDefault());
             container.RegisterSingleton<DiscordSocketClient>(new InjectionConstructor(typeof(DiscordSocketConfig)));
             container.RegisterSingleton<Connection>();
+            container.RegisterSingleton<IFileSystem, FileSystem>();
         }
 
         public static T Resolve<T>()
