@@ -1,6 +1,6 @@
-﻿using System.IO.Abstractions;
-using DiscordBot.Storage.Interfaces;
+﻿using DiscordBot.Storage.Interfaces;
 using Newtonsoft.Json;
+using System.IO.Abstractions;
 
 namespace DiscordBot.Storage.Implementations
 {

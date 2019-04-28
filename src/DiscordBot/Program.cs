@@ -1,8 +1,8 @@
-﻿using System;
+﻿using DiscordBot.Core;
+using DiscordBot.Core.Entities;
+using System;
 using System.IO;
 using System.Threading.Tasks;
-using DiscordBot.Core;
-using DiscordBot.Core.Entities;
 
 namespace DiscordBot
 {

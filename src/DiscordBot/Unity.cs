@@ -1,11 +1,10 @@
-﻿using DiscordBot.Storage.Implementations;
-using DiscordBot.Storage.Interfaces;
+﻿using Discord.WebSocket;
 using DiscordBot.Core;
-using Discord.WebSocket;
+using DiscordBot.Storage.Implementations;
+using DiscordBot.Storage.Interfaces;
+using System.IO.Abstractions;
 using Unity;
 using Unity.Injection;
-using System.IO;
-using System.IO.Abstractions;
 
 namespace DiscordBot
 {

@@ -1,6 +1,6 @@
-﻿using System;
+﻿using DiscordBot.Storage.Interfaces;
+using System;
 using System.Collections.Generic;
-using DiscordBot.Storage.Interfaces;
 
 namespace DiscordBot.Storage.Implementations
 {
