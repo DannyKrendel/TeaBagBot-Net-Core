@@ -21,11 +21,12 @@ namespace DiscordBot
         public async Task Start()
         {
             var tokenPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"..\..\..\Config\Token");
-
-            await connection.ConnectAsync(new BotConfig()
+            var config = new BotConfig()
             {
                 Token = storage.RestoreObject<string>(tokenPath)
-            });
+            };
+
+            await connection.ConnectAsync(config);
         }
     }
 }
