@@ -8,7 +8,7 @@ namespace DiscordBot.xUnit.Tests
         [Fact]
         public void GetDefault_ShouldWork()
         {
-            var config = SocketConfig.GetDefault();
+            var config = SocketConfigFactory.GetDefault();
 
             Assert.NotNull(config);
         }
@@ -16,7 +16,7 @@ namespace DiscordBot.xUnit.Tests
         [Fact]
         public void GetNew_ShouldWork()
         {
-            var config = SocketConfig.GetNew();
+            var config = SocketConfigFactory.GetNew();
 
             Assert.NotNull(config);
         }

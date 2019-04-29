@@ -3,7 +3,7 @@ using Discord.WebSocket;
 
 namespace DiscordBot.Core
 {
-    public static class SocketConfig
+    public static class SocketConfigFactory
     {
         public static DiscordSocketConfig GetDefault()
         {
