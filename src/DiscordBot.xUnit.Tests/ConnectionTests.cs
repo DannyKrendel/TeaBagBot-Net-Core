@@ -18,7 +18,7 @@ namespace DiscordBot.xUnit.Tests
             var connection = Unity.Resolve<Connection>();
 
             await Assert.ThrowsAsync<Discord.Net.HttpException>(
-                async () => await connection.ConnectAsync(new BotConfig { Token = "FakeToken" }));
+                async () => await connection.ConnectAsync("FakeToken"));
         }
     }
 }
