@@ -23,7 +23,7 @@ namespace DiscordBot.Storage.Implementations
         {
             var file = $"{path}.json";
             fileSystem.Directory.CreateDirectory(fileSystem.Path.GetDirectoryName(file));
-            var json = JsonConvert.SerializeObject(obj);
+            var json = JsonConvert.SerializeObject(obj, Formatting.Indented);
             fileSystem.File.WriteAllText(file, json);
         }
     }
