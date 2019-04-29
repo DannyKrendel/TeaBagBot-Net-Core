@@ -30,6 +30,7 @@ namespace DiscordBot
             container.RegisterFactory<DiscordSocketConfig>(x => SocketConfig.GetDefault());
             container.RegisterSingleton<DiscordSocketClient>(new InjectionConstructor(typeof(DiscordSocketConfig)));
             container.RegisterSingleton<Connection>();
+            container.RegisterSingleton<DiscordBot>();
             container.RegisterSingleton<IFileSystem, FileSystem>();
         }
 

@@ -21,34 +21,34 @@ namespace DiscordBot.xUnit.Tests
         [Fact]
         public void ResolveILogger_ShouldWork()
         {
-            var storage1 = Unity.Resolve<ILogger>();
-            var storage2 = Unity.Resolve<ILogger>();
+            var logger1 = Unity.Resolve<ILogger>();
+            var logger2 = Unity.Resolve<ILogger>();
 
-            Assert.NotNull(storage1);
-            Assert.NotNull(storage2);
-            Assert.Same(storage1, storage2);
+            Assert.NotNull(logger1);
+            Assert.NotNull(logger2);
+            Assert.Same(logger1, logger2);
         }
 
         [Fact]
         public void ResolveDiscordSocketClient_ShouldWork()
         {
-            var storage1 = Unity.Resolve<DiscordSocketClient>();
-            var storage2 = Unity.Resolve<DiscordSocketClient>();
+            var client1 = Unity.Resolve<DiscordSocketClient>();
+            var client2 = Unity.Resolve<DiscordSocketClient>();
 
-            Assert.NotNull(storage1);
-            Assert.NotNull(storage2);
-            Assert.Same(storage1, storage2);
+            Assert.NotNull(client1);
+            Assert.NotNull(client2);
+            Assert.Same(client1, client2);
         }
 
         [Fact]
         public void ResolveConnection_ShouldWork()
         {
-            var storage1 = Unity.Resolve<Connection>();
-            var storage2 = Unity.Resolve<Connection>();
+            var con1 = Unity.Resolve<Connection>();
+            var con2 = Unity.Resolve<Connection>();
 
-            Assert.NotNull(storage1);
-            Assert.NotNull(storage2);
-            Assert.Same(storage1, storage2);
+            Assert.NotNull(con1);
+            Assert.NotNull(con2);
+            Assert.Same(con1, con2);
         }
     }
 }
