@@ -19,6 +19,17 @@ namespace DiscordBot.Core
         public async Task InitializeAsync()
         {
             await service.AddModulesAsync(Assembly.GetEntryAssembly(), null);
+            client.MessageReceived += HandleMessage;
+        }
+
+        private async Task HandleMessage(SocketMessage socketMsg)
+        {
+            var msg = socketMsg as SocketUserMessage;
+            if (msg == null)
+                return;
+            var context = new SocketCommandContext(client, msg);
+
+            int argPos = 0;
         }
     }
 }
