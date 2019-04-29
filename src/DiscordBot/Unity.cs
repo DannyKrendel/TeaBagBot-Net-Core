@@ -1,4 +1,5 @@
-﻿using Discord.WebSocket;
+﻿using Discord.Commands;
+using Discord.WebSocket;
 using DiscordBot.Core;
 using DiscordBot.Storage.Implementations;
 using DiscordBot.Storage.Interfaces;
@@ -27,7 +28,8 @@ namespace DiscordBot
             container = new UnityContainer();
             container.RegisterSingleton<IDataStorage, JsonStorage>();
             container.RegisterSingleton<ILogger, Logger>();
-            container.RegisterFactory<DiscordSocketConfig>(x => SocketConfig.GetDefault());
+            container.RegisterFactory<DiscordSocketConfig>(x => SocketConfigFactory.GetDefault());
+            container.RegisterFactory<CommandServiceConfig>(x => CommandServiceConfigFactory.GetDefault());
             container.RegisterSingleton<DiscordSocketClient>(new InjectionConstructor(typeof(DiscordSocketConfig)));
             container.RegisterSingleton<Connection>();
             container.RegisterSingleton<DiscordBot>();
