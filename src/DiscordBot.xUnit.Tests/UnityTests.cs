@@ -17,6 +17,7 @@ namespace DiscordBot.xUnit.Tests
             AssertResolvedTypeIsSingleton<Connection>();
             AssertResolvedTypeIsSingleton<DiscordBot>();
             AssertResolvedTypeIsSingleton<IFileSystem>();
+            AssertResolvedTypeIsSingleton<CommandHandler>();
         }
 
         private void AssertResolvedTypeIsSingleton<T>() where T : class
