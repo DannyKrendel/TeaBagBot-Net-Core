@@ -34,6 +34,7 @@ namespace DiscordBot
             container.RegisterSingleton<Connection>();
             container.RegisterSingleton<DiscordBot>();
             container.RegisterSingleton<IFileSystem, FileSystem>();
+            container.RegisterSingleton<CommandHandler>();
         }
 
         public static T Resolve<T>()
