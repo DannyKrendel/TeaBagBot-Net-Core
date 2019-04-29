@@ -8,6 +8,7 @@ namespace DiscordBot
         {
             var bot = Unity.Resolve<DiscordBot>();
             await bot.Start();
+            await Task.Delay(-1);
         }
     }
 }
