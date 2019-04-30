@@ -1,6 +1,7 @@
 ﻿using Discord.Commands;
 using Discord.WebSocket;
 using DiscordBot.Core;
+using DiscordBot.Core.Factories;
 using DiscordBot.Storage.Implementations;
 using DiscordBot.Storage.Interfaces;
 using System.IO.Abstractions;

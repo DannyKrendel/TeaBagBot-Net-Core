@@ -5,14 +5,24 @@ namespace DiscordBot.xUnit.Tests
 {
     public class LoggerTests
     {
-        [Fact]
-        public void BasicLogger_ThrowsException()
+        [Theory]
+        [InlineData(null)]
+        public void Log_ShouldThrow_IfMessageIsNull(string msg)
         {
-            var logger = Unity.Resolve<ILogger>();
+            var logger = new Logger();
 
-            Assert.Throws<ArgumentException>(() => logger.Log(null));
+            var ex = Record.Exception(() => logger.Log(msg));
 
-            var ex = Record.Exception(() => logger.Log("test"));
+            Assert.IsType<ArgumentException>(ex);
+        }
+
+        [Theory]
+        [InlineData("test")]
+        public void Log_ShouldLog_IfValidMessage(string msg)
+        {
+            var logger = new Logger();
+
+            var ex = Record.Exception(() => logger.Log(msg));
 
             Assert.Null(ex);
         }

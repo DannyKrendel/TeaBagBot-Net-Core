@@ -8,61 +8,69 @@ namespace DiscordBot.xUnit.Tests
     public class JsonStorageTests
     {
         [Theory]
-        [InlineData("", "")]
-        [InlineData("", null)]
-        public void JsonStorage_StoreObject_ShouldThrow(object obj, string path)
+        [InlineData("")]
+        [InlineData(null)]
+        [InlineData("test/test")]
+        public void StoreObject_ShouldNotCreateFile_IfInvalidPath(string path)
         {
             var mockFileSystem = new MockFileSystem();
-            var mockInputFile = new MockFileData("\"test\"");
-            mockFileSystem.AddFile(@"C:\test.json", mockInputFile);
-            var storage = new JsonStorage(mockFileSystem);
+            var storage = new JsonStorage(mockFileSystem, Unity.Resolve<ILogger>());
 
-            var exception = Record.Exception(() => storage.StoreObject(obj, path));
+            storage.StoreObject("test", path);
 
-            Assert.NotNull(exception);
+            Assert.False(mockFileSystem.FileExists($"{path}.json"));
         }
 
         [Theory]
-        [InlineData(@"C:\test", "test", "\"test\"")]
-        public void JsonStorage_StoreObject_ShouldWork(string path, string data, string expected)
+        [InlineData(@"C:\test")]
+        public void StoreObject_ShouldCreateFile_IfValidPath(string path)
         {
             var mockFileSystem = new MockFileSystem();
-            var storage = new JsonStorage(mockFileSystem);
+            var storage = new JsonStorage(mockFileSystem, Unity.Resolve<ILogger>());
 
-            storage.StoreObject(data, path);
+            storage.StoreObject("data", path);
 
-            Assert.True(Path.IsPathFullyQualified(path));
             Assert.True(mockFileSystem.FileExists($"{path}.json"));
-            Assert.Equal(mockFileSystem.File.ReadAllText($"{path}.json"), expected);
+        }
+
+        [Theory]
+        [InlineData("test", "\"test\"")]
+        public void StoreObject_FileShouldContainExpected_IfValidData(string data, string expected)
+        {
+            var mockFileSystem = new MockFileSystem();
+            var storage = new JsonStorage(mockFileSystem, Unity.Resolve<ILogger>());
+
+            storage.StoreObject(data, @"C:\test");
+
+            Assert.Equal(mockFileSystem.File.ReadAllText(@"C:\test.json"), expected);
         }
 
         [Theory]
         [InlineData("")]
         [InlineData(null)]
-        public void JsonStorage_RestoreObject_ShouldThrow(string path)
+        public void RestoreObject_ShouldReturnNull_IfInvalidPath(string path)
         {
             var mockFileSystem = new MockFileSystem();
             var mockInputFile = new MockFileData("\"test\"");
             mockFileSystem.AddFile(@"C:\test.json", mockInputFile);
-            var storage = new JsonStorage(mockFileSystem);
-
-            var exception = Record.Exception(() => storage.RestoreObject<string>(path));
-
-            Assert.NotNull(exception);
-        }
-
-        [Theory]
-        [InlineData(@"C:\test", "\"test\"", "test")]
-        public void JsonStorage_RestoreObject_ShouldWork(string path, string jsonData, string expected)
-        {
-            var mockFileSystem = new MockFileSystem();
-            var mockInputFile = new MockFileData(jsonData);
-            mockFileSystem.AddFile($"{path}.json", mockInputFile);
-            var storage = new JsonStorage(mockFileSystem);
+            var storage = new JsonStorage(mockFileSystem, Unity.Resolve<ILogger>());
 
             var actual = storage.RestoreObject<string>(path);
 
-            Assert.True(Path.IsPathFullyQualified(path));
+            Assert.Null(actual);
+        }
+
+        [Theory]
+        [InlineData("\"test\"", "test")]
+        public void RestoreObject_ShouldReturnExpected_IfValidInput(string jsonData, string expected)
+        {
+            var mockFileSystem = new MockFileSystem();
+            var mockInputFile = new MockFileData(jsonData);
+            mockFileSystem.AddFile(@"C:\test.json", mockInputFile);
+            var storage = new JsonStorage(mockFileSystem, Unity.Resolve<ILogger>());
+
+            var actual = storage.RestoreObject<string>(@"C:\test");
+
             Assert.Equal(expected, actual);
         }
     }

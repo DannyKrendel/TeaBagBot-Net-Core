@@ -8,7 +8,7 @@ namespace DiscordBot.xUnit.Tests
     {
         [Theory]
         [InlineData("", "")]
-        public void MemoryStorage_RestoreObject_ShouldWork(string expectedObj, string expectedKey)
+        public void RestoreObject_ShouldReturnExpected_IfValidKey(string expectedObj, string expectedKey)
         {
             IDataStorage storage = new MemoryStorage();
             storage.StoreObject(expectedObj + "some string", expectedKey);
@@ -22,7 +22,7 @@ namespace DiscordBot.xUnit.Tests
         [Theory]
         [InlineData("")]
         [InlineData(null)]
-        public void MemoryStorage_RestoreObject_ShouldThrow(string key)
+        public void RestoreObject_ShouldThrow_IfInvalidKey(string key)
         {
             IDataStorage storage = new MemoryStorage();
 

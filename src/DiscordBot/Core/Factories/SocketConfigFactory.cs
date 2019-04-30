@@ -1,7 +1,7 @@
 ﻿using Discord;
 using Discord.WebSocket;
 
-namespace DiscordBot.Core
+namespace DiscordBot.Core.Factories
 {
     public static class SocketConfigFactory
     {

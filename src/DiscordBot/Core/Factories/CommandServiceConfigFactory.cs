@@ -1,7 +1,7 @@
 ﻿using Discord;
 using Discord.Commands;
 
-namespace DiscordBot.Core
+namespace DiscordBot.Core.Factories
 {
     public static class CommandServiceConfigFactory
     {

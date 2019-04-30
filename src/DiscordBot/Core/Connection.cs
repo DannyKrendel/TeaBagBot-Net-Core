@@ -1,6 +1,5 @@
 ﻿using Discord;
 using Discord.WebSocket;
-using DiscordBot.Core.Entities;
 using System.Threading.Tasks;
 
 namespace DiscordBot.Core
@@ -22,8 +21,6 @@ namespace DiscordBot.Core
 
             await client.LoginAsync(TokenType.Bot, token);
             await client.StartAsync();
-
-            await Task.Delay(1000);
         }
     }
 }

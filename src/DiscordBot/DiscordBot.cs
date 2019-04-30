@@ -1,8 +1,5 @@
 ﻿using DiscordBot.Core;
-using DiscordBot.Core.Entities;
 using DiscordBot.Storage.Interfaces;
-using System;
-using System.IO;
 using System.Threading.Tasks;
 
 namespace DiscordBot
@@ -11,16 +8,19 @@ namespace DiscordBot
     {
         private readonly IDataStorage storage;
         private readonly Connection connection;
+        private readonly CommandHandler commandHandler;
 
-        public DiscordBot(IDataStorage storage, Connection connection)
+        public DiscordBot(IDataStorage storage, Connection connection, CommandHandler commandHandler)
         {
             this.storage = storage;
             this.connection = connection;
+            this.commandHandler = commandHandler;
         }
 
-        public async Task Start()
+        public async Task StartAsync()
         {
             await connection.ConnectAsync(TokenManager.GetToken());
+            await commandHandler.InitializeAsync();
         }
     }
 }

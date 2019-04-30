@@ -9,7 +9,7 @@ namespace DiscordBot.xUnit.Tests
     public class UnityTests
     {
         [Fact]
-        public void ResolveSingleton_ShouldWork()
+        public void Resolve_ShouldReturnSingleton()
         {
             AssertResolvedTypeIsSingleton<IDataStorage>();
             AssertResolvedTypeIsSingleton<ILogger>();
