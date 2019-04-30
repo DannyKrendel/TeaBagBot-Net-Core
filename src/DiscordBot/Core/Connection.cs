@@ -1,5 +1,6 @@
 ﻿using Discord;
 using Discord.WebSocket;
+using System;
 using System.Threading.Tasks;
 
 namespace DiscordBot.Core
@@ -19,8 +20,15 @@ namespace DiscordBot.Core
         {
             client.Log += logger.Log;
 
-            await client.LoginAsync(TokenType.Bot, token);
-            await client.StartAsync();
+            try
+            {
+                await client.LoginAsync(TokenType.Bot, token);
+                await client.StartAsync();
+            }
+            catch (Exception ex)
+            {
+                throw new ConnectionException("Something went wrong while trying to connect.", ex);
+            }
         }
     }
 }
