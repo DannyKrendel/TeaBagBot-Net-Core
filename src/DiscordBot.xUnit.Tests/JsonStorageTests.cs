@@ -2,8 +2,6 @@
 using DiscordBot.Storage.Implementations;
 using System;
 using System.IO.Abstractions.TestingHelpers;
-using System.Security.AccessControl;
-using System.Security.Principal;
 using Xunit;
 
 namespace DiscordBot.xUnit.Tests

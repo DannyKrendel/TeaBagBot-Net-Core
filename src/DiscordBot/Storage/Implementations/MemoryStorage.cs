@@ -37,7 +37,7 @@ namespace DiscordBot.Storage.Implementations
                 throw new ArgumentException($"Key was empty.", nameof(key));
             if (!dictionary.ContainsKey(key))
                 throw new ArgumentException($"Object with key '{key}' was not found in storage.", nameof(key));
-            
+
             try
             {
                 return (T)dictionary[key];

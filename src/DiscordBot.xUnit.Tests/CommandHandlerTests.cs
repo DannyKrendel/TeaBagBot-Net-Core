@@ -1,6 +1,4 @@
-﻿using Discord.WebSocket;
-using DiscordBot.Core;
-using Moq;
+﻿using DiscordBot.Core;
 using System;
 using System.Threading.Tasks;
 using Xunit;
