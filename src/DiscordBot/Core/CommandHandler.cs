@@ -28,10 +28,10 @@ namespace DiscordBot.Core
         public async Task HandleMessageAsync(SocketMessage socketMsg)
         {
             if (socketMsg == null)
-                throw new ArgumentException($"{nameof(socketMsg)} cannot be null.");
+                throw new ArgumentNullException(nameof(socketMsg), "Socket message was null.");
             var msg = socketMsg as SocketUserMessage;
             if (msg == null)
-                throw new InvalidCastException($"{nameof(socketMsg)} cannot be null.");
+                throw new InvalidCastException($"Can't cast '{socketMsg.GetType()}' to '{typeof(SocketUserMessage)}'");
 
             int argPos = 0;
 

@@ -1,4 +1,6 @@
-﻿using DiscordBot.Core;
+﻿using Discord.WebSocket;
+using DiscordBot.Core;
+using Moq;
 using System;
 using System.Threading.Tasks;
 using Xunit;
@@ -8,13 +10,13 @@ namespace DiscordBot.xUnit.Tests
     public class CommandHandlerTests
     {
         [Fact]
-        public async Task HandleMessage_ShouldThrowArgumentException_IfMessageIsNull()
+        public async Task HandleMessage_ShouldThrowArgumentNullException_IfSocketMessageIsNull()
         {
             var comHandler = Unity.Resolve<CommandHandler>();
 
             var argException = await Record.ExceptionAsync(async () => await comHandler.HandleMessageAsync(null));
 
-            Assert.IsType<ArgumentException>(argException);
+            Assert.IsType<ArgumentNullException>(argException);
         }
     }
 }
