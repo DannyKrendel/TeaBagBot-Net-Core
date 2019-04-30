@@ -1,6 +1,9 @@
-﻿using DiscordBot.Storage.Implementations;
-using System.IO;
+﻿using DiscordBot.Storage.Exceptions;
+using DiscordBot.Storage.Implementations;
+using System;
 using System.IO.Abstractions.TestingHelpers;
+using System.Security.AccessControl;
+using System.Security.Principal;
 using Xunit;
 
 namespace DiscordBot.xUnit.Tests
@@ -11,14 +14,14 @@ namespace DiscordBot.xUnit.Tests
         [InlineData("")]
         [InlineData(null)]
         [InlineData("test/test")]
-        public void StoreObject_ShouldNotCreateFile_IfInvalidPath(string path)
+        public void StoreObject_ShouldThrowArgumentException_IfInvalidPath(string path)
         {
             var mockFileSystem = new MockFileSystem();
-            var storage = new JsonStorage(mockFileSystem, Unity.Resolve<ILogger>());
+            var storage = new JsonStorage(mockFileSystem);
 
-            storage.StoreObject("test", path);
+            var exception = Record.Exception(() => storage.StoreObject("test", path));
 
-            Assert.False(mockFileSystem.FileExists($"{path}.json"));
+            Assert.IsAssignableFrom<ArgumentException>(exception);
         }
 
         [Theory]
@@ -26,7 +29,7 @@ namespace DiscordBot.xUnit.Tests
         public void StoreObject_ShouldCreateFile_IfValidPath(string path)
         {
             var mockFileSystem = new MockFileSystem();
-            var storage = new JsonStorage(mockFileSystem, Unity.Resolve<ILogger>());
+            var storage = new JsonStorage(mockFileSystem);
 
             storage.StoreObject("data", path);
 
@@ -38,7 +41,7 @@ namespace DiscordBot.xUnit.Tests
         public void StoreObject_FileShouldContainExpected_IfValidData(string data, string expected)
         {
             var mockFileSystem = new MockFileSystem();
-            var storage = new JsonStorage(mockFileSystem, Unity.Resolve<ILogger>());
+            var storage = new JsonStorage(mockFileSystem);
 
             storage.StoreObject(data, @"C:\test");
 
@@ -48,16 +51,27 @@ namespace DiscordBot.xUnit.Tests
         [Theory]
         [InlineData("")]
         [InlineData(null)]
-        public void RestoreObject_ShouldReturnNull_IfInvalidPath(string path)
+        public void RestoreObject_ShouldThrowArgumentException_IfInvalidPath(string path)
         {
             var mockFileSystem = new MockFileSystem();
-            var mockInputFile = new MockFileData("\"test\"");
-            mockFileSystem.AddFile(@"C:\test.json", mockInputFile);
-            var storage = new JsonStorage(mockFileSystem, Unity.Resolve<ILogger>());
+            var storage = new JsonStorage(mockFileSystem);
 
-            var actual = storage.RestoreObject<string>(path);
+            var exception = Record.Exception(() => storage.RestoreObject<string>(path));
 
-            Assert.Null(actual);
+            Assert.IsAssignableFrom<ArgumentException>(exception);
+        }
+
+        [Theory]
+        [InlineData(@"C:\test")]
+        [InlineData(@"C:\fakePath\test")]
+        public void RestoreObject_ShouldThrowJsonStorageException_IfFileDoesntExist(string path)
+        {
+            var mockFileSystem = new MockFileSystem();
+            var storage = new JsonStorage(mockFileSystem);
+
+            var exception = Record.Exception(() => storage.RestoreObject<string>(path));
+
+            Assert.IsType<JsonStorageException>(exception);
         }
 
         [Theory]
@@ -67,7 +81,7 @@ namespace DiscordBot.xUnit.Tests
             var mockFileSystem = new MockFileSystem();
             var mockInputFile = new MockFileData(jsonData);
             mockFileSystem.AddFile(@"C:\test.json", mockInputFile);
-            var storage = new JsonStorage(mockFileSystem, Unity.Resolve<ILogger>());
+            var storage = new JsonStorage(mockFileSystem);
 
             var actual = storage.RestoreObject<string>(@"C:\test");
 

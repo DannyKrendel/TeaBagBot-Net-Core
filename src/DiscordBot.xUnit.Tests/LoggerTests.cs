@@ -7,13 +7,14 @@ namespace DiscordBot.xUnit.Tests
     {
         [Theory]
         [InlineData(null)]
-        public void Log_ShouldThrow_IfMessageIsNull(string msg)
+        [InlineData("")]
+        public void Log_ShouldThrowArgumentException_IfInvalidMessage(string msg)
         {
             var logger = new Logger();
 
             var ex = Record.Exception(() => logger.Log(msg));
 
-            Assert.IsType<ArgumentException>(ex);
+            Assert.IsAssignableFrom<ArgumentException>(ex);
         }
 
         [Theory]

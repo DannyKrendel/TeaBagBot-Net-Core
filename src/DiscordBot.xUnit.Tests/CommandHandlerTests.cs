@@ -12,7 +12,7 @@ namespace DiscordBot.xUnit.Tests
         {
             var comHandler = Unity.Resolve<CommandHandler>();
 
-            var argException = await Record.ExceptionAsync(async () => await comHandler.HandleMessage(null));
+            var argException = await Record.ExceptionAsync(async () => await comHandler.HandleMessageAsync(null));
 
             Assert.IsType<ArgumentException>(argException);
         }

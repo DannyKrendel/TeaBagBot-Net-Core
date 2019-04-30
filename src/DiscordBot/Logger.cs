@@ -7,7 +7,10 @@ namespace DiscordBot
         public void Log(string message)
         {
             if (message is null)
-                throw new ArgumentException($"{nameof(message)} cannot be null.");
+                throw new ArgumentNullException(nameof(message), "Message was null.");
+            if (message == "")
+                throw new ArgumentException(nameof(message), "Message was empty.");
+
             Console.WriteLine(message);
         }
     }

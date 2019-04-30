@@ -1,5 +1,7 @@
-﻿using DiscordBot.Storage.Implementations;
+﻿using DiscordBot.Storage.Exceptions;
+using DiscordBot.Storage.Implementations;
 using DiscordBot.Storage.Interfaces;
+using System;
 using Xunit;
 
 namespace DiscordBot.xUnit.Tests
@@ -7,28 +9,75 @@ namespace DiscordBot.xUnit.Tests
     public class MemoryStorageTests
     {
         [Theory]
-        [InlineData("", "")]
-        public void RestoreObject_ShouldReturnExpected_IfValidKey(string expectedObj, string expectedKey)
+        [InlineData(null)]
+        [InlineData("")]
+        public void StoreObject_ShouldThrowArgumentException_IfInvalidKey(string key)
         {
             IDataStorage storage = new MemoryStorage();
-            storage.StoreObject(expectedObj + "some string", expectedKey);
-            storage.StoreObject(expectedObj, expectedKey);
 
-            var actualObj = storage.RestoreObject<string>(expectedKey);
+            var exception = Record.Exception(() => storage.StoreObject("test", key));
 
-            Assert.Equal(expectedObj, actualObj);
+            Assert.IsAssignableFrom<ArgumentException>(exception);
+        }
+
+        [Theory]
+        [InlineData("value", "key")]
+        public void StoreObject_ShouldContainExpected_IfValidKey(object expected, string key)
+        {
+            IDataStorage storage = new MemoryStorage();
+
+            storage.StoreObject(expected, key);
+
+            var actualObj = storage.RestoreObject<string>(key);
+            Assert.Equal(expected, actualObj);
+        }
+
+        [Theory]
+        [InlineData("previous", "expected", "key")]
+        public void StoreObject_ShouldReplacePreviousWithExpected_IfValidKey(object previous, object expected, string key)
+        {
+            IDataStorage storage = new MemoryStorage();
+
+            storage.StoreObject(previous, key);
+            storage.StoreObject(expected, key);
+
+            var actual = storage.RestoreObject<string>(key);
+            Assert.Equal(expected, actual);
         }
 
         [Theory]
         [InlineData("")]
         [InlineData(null)]
-        public void RestoreObject_ShouldThrow_IfInvalidKey(string key)
+        public void RestoreObject_ShouldThrowArgumentException_IfInvalidKey(string key)
         {
             IDataStorage storage = new MemoryStorage();
 
             var exception = Record.Exception(() => storage.RestoreObject<string>(key));
 
-            Assert.NotNull(exception);
+            Assert.IsAssignableFrom<ArgumentException>(exception);
+        }
+
+        [Theory]
+        [InlineData("key")]
+        public void RestoreObject_ShouldThrowArgumentException_IfObjectWasNotFound(string key)
+        {
+            IDataStorage storage = new MemoryStorage();
+
+            var exception = Record.Exception(() => storage.RestoreObject<object>(key));
+
+            Assert.IsAssignableFrom<ArgumentException>(exception);
+        }
+
+        [Theory]
+        [InlineData("obj", "key")]
+        public void RestoreObject_ShouldThrowMemoryStorageException_IfWrongCast(object obj, string key)
+        {
+            IDataStorage storage = new MemoryStorage();
+            storage.StoreObject(obj, key);
+
+            var exception = Record.Exception(() => storage.RestoreObject<int>(key));
+
+            Assert.IsType<MemoryStorageException>(exception);
         }
     }
 }

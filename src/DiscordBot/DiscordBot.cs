@@ -6,20 +6,21 @@ namespace DiscordBot
 {
     public class DiscordBot
     {
-        private readonly IDataStorage storage;
+        private readonly ILogger logger;
         private readonly Connection connection;
         private readonly CommandHandler commandHandler;
 
-        public DiscordBot(IDataStorage storage, Connection connection, CommandHandler commandHandler)
+        public DiscordBot(ILogger logger, Connection connection, CommandHandler commandHandler)
         {
-            this.storage = storage;
+            this.logger = logger;
             this.connection = connection;
             this.commandHandler = commandHandler;
         }
 
         public async Task StartAsync()
         {
-            await connection.ConnectAsync(TokenManager.GetToken());
+            string token = TokenManager.GetToken();
+            await connection.ConnectAsync(token);
             await commandHandler.InitializeAsync();
         }
     }
