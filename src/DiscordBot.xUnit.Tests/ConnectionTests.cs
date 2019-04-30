@@ -15,7 +15,7 @@ namespace DiscordBot.xUnit.Tests
 
             var exception = await Record.ExceptionAsync(async () => await connection.ConnectAsync(token));
 
-            Assert.IsType<Discord.Net.HttpException>(exception);
+            Assert.IsType<ConnectionException>(exception);
         }
     }
 }
