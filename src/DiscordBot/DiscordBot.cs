@@ -1,4 +1,6 @@
 ﻿using DiscordBot.Core;
+using DiscordBot.Storage.Exceptions;
+using System;
 using System.Threading.Tasks;
 
 namespace DiscordBot
@@ -18,9 +20,16 @@ namespace DiscordBot
 
         public async Task StartAsync()
         {
-            string token = TokenManager.GetToken();
-            await connection.ConnectAsync(token);
-            await commandHandler.InitializeAsync();
+            try
+            {
+                string token = TokenManager.GetToken();
+                await connection.ConnectAsync(token);
+                await commandHandler.InitializeAsync();
+            }
+            catch (Exception ex)
+            {
+                logger.Log(ex.Message + "\n" + ex.StackTrace);
+            }
         }
     }
 }

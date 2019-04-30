@@ -1,4 +1,5 @@
 ﻿using DiscordBot.Storage.Interfaces;
+using System;
 
 namespace DiscordBot
 {
@@ -8,7 +9,14 @@ namespace DiscordBot
 
         public static string GetToken()
         {
-            return Unity.Resolve<IDataStorage>().RestoreObject<string>(tokenPath);
+            try
+            {
+                return Unity.Resolve<IDataStorage>().RestoreObject<string>(tokenPath);
+            }
+            catch (Exception ex)
+            {
+                throw new TokenException($"Path to token was incorrect. Fix it in '{nameof(TokenManager)}'.", ex);
+            }
         }
     }
 }

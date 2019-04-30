@@ -1,5 +1,6 @@
 ﻿using DiscordBot.Core.Entities;
 using DiscordBot.Storage.Interfaces;
+using System;
 
 namespace DiscordBot
 {
@@ -14,7 +15,14 @@ namespace DiscordBot
 
         public static void SaveConfig(BotConfig config)
         {
-            Unity.Resolve<IDataStorage>().StoreObject(config, configPath);
+            try
+            {
+                Unity.Resolve<IDataStorage>().StoreObject(config, configPath);
+            }
+            catch (Exception ex)
+            {
+                throw new ConfigException($"Path to config was incorrect. Fix it in '{nameof(ConfigManager)}'.", ex);
+            }
         }
     }
 }
