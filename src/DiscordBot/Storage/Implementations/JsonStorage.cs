@@ -31,7 +31,7 @@ namespace DiscordBot.Storage.Implementations
             }
             catch (Exception ex)
             {
-                throw new JsonStorageException($"Couldn't restore object of type '{typeof(T).Name}' from '{path}'.", ex);
+                throw new JsonStorageException($"Couldn't restore object of type '{typeof(T)}' from '{path}'.", ex);
             }
         }
 
