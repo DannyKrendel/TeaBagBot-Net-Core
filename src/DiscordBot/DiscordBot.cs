@@ -1,5 +1,4 @@
 ﻿using DiscordBot.Core;
-using DiscordBot.Storage.Exceptions;
 using System;
 using System.Threading.Tasks;
 
@@ -22,7 +21,7 @@ namespace DiscordBot
         {
             try
             {
-                string token = TokenManager.GetToken();
+                string token = TokenService.GetToken();
                 await connection.ConnectAsync(token);
                 await commandHandler.InitializeAsync();
             }

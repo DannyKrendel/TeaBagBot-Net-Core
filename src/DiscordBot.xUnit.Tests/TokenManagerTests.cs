@@ -7,7 +7,7 @@ namespace DiscordBot.xUnit.Tests
         [Fact]
         public void GetToken_ShouldNotReturnNull()
         {
-            string token = TokenManager.GetToken();
+            string token = TokenService.GetToken();
 
             Assert.NotNull(token);
         }

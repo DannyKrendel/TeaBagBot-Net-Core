@@ -3,7 +3,7 @@ using System;
 
 namespace DiscordBot
 {
-    public static class TokenManager
+    public static class TokenService
     {
         private static readonly string tokenPath = @"C:\Users\Danny\Source\Repos\DiscordBot\src\DiscordBot\Config\Token";
 
