@@ -1,5 +1,6 @@
 ﻿using Discord.Commands;
 using Discord.WebSocket;
+using DiscordBot.Core.Entities;
 using System;
 using System.Reflection;
 using System.Threading.Tasks;
@@ -22,6 +23,7 @@ namespace DiscordBot.Core
         public async Task InitializeAsync()
         {
             await service.AddModulesAsync(Assembly.GetEntryAssembly(), null);
+
             client.MessageReceived += HandleMessageAsync;
         }
 
@@ -35,9 +37,20 @@ namespace DiscordBot.Core
 
             int argPos = 0;
 
-            if (!msg.HasStringPrefix(ConfigManager.LoadConfig().Prefix, ref argPos) ||
-                msg.HasMentionPrefix(client.CurrentUser, ref argPos) ||
-                msg.Author.IsBot)
+            BotConfig config = null;
+
+            // This is here for debug purposes, and it does catch an exception
+            try
+            {
+                config = ConfigManager.LoadConfig();
+            }
+            catch
+            {
+                throw;
+            }
+
+            if (!msg.HasStringPrefix(config.Prefix, ref argPos) &&
+                !msg.HasMentionPrefix(client.CurrentUser, ref argPos))
                 return;
 
             var context = new SocketCommandContext(client, msg);
