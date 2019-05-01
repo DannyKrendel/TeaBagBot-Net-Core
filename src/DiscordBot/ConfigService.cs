@@ -4,7 +4,7 @@ using System;
 
 namespace DiscordBot
 {
-    public static class ConfigManager
+    public static class ConfigService
     {
         private static readonly string configPath = @"C:\Users\Danny\Source\Repos\DiscordBot\src\DiscordBot\Config\Config";
 

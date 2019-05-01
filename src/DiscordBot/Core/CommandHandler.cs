@@ -32,7 +32,7 @@ namespace DiscordBot.Core
 
             try
             {
-                config = ConfigManager.LoadConfig();
+                config = ConfigService.LoadConfig();
             }
             catch (ConfigException ex)
             {
