@@ -28,7 +28,17 @@ namespace DiscordBot.Core
 
         public async Task HandleMessageAsync(SocketMessage socketMsg)
         {
-            BotConfig config = ConfigManager.LoadConfig(); // this should throw
+            BotConfig config = null;
+
+            try
+            {
+                config = ConfigManager.LoadConfig();
+            }
+            catch (ConfigException ex)
+            {
+                logger.LogException(ex);
+                return;
+            }
 
             var msg = socketMsg as SocketUserMessage;
             int argPos = 0;
