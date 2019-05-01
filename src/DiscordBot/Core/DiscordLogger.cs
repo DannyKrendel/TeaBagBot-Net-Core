@@ -15,6 +15,10 @@ namespace DiscordBot.Core
         public Task Log(LogMessage logMsg)
         {
             logger.Log(logMsg.ToString());
+
+            if (logMsg.Exception != null)
+                logger.LogException(logMsg.Exception);
+
             return Task.CompletedTask;
         }
     }
