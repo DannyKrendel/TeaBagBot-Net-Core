@@ -15,7 +15,7 @@ namespace DiscordBot
             }
             catch (Exception ex)
             {
-                throw new TokenException($"Path to token was incorrect. Fix it in '{nameof(TokenManager)}'.", ex);
+                throw new TokenException($"Couldn't load token from '{tokenPath}'.", ex);
             }
         }
     }
