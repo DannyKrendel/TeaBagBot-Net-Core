@@ -28,7 +28,7 @@ namespace DiscordBot
             }
             catch (Exception ex)
             {
-                logger.Log(ex.Message + "\n" + ex.StackTrace);
+                logger.LogException(ex);
             }
         }
     }
