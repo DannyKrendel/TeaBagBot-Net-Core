@@ -10,7 +10,14 @@ namespace DiscordBot
 
         public static BotConfig LoadConfig()
         {
-            return Unity.Resolve<IDataStorage>().RestoreObject<BotConfig>(configPath);
+            try
+            {
+                return Unity.Resolve<IDataStorage>().RestoreObject<BotConfig>(configPath);
+            }
+            catch (Exception ex)
+            {
+                throw new ConfigException($"Couldn't load config from '{configPath}'.", ex);
+            }
         }
 
         public static void SaveConfig(BotConfig config)
@@ -21,7 +28,7 @@ namespace DiscordBot
             }
             catch (Exception ex)
             {
-                throw new ConfigException($"Path to config was incorrect. Fix it in '{nameof(ConfigManager)}'.", ex);
+                throw new ConfigException($"Couldn't save config to '{configPath}'.", ex);
             }
         }
     }
