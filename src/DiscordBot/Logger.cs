@@ -14,7 +14,11 @@ namespace DiscordBot
 
         public void LogException(Exception ex)
         {
-            Console.WriteLine(ex.Message + "\n" + ex.StackTrace);
+            while (ex != null)
+            {
+                Console.WriteLine(ex.Message + "\n" + ex.StackTrace);
+                ex = ex.InnerException;
+            }
         }
     }
 }
