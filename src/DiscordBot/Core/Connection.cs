@@ -27,9 +27,14 @@ namespace DiscordBot.Core
             }
             catch (Exception ex)
             {
-                await client.StopAsync();
                 throw new ConnectionException("Something went wrong while trying to connect.", ex);
             }
+        }
+
+        public async Task DisconnectAsync()
+        {
+            await client.LogoutAsync();
+            await client.StopAsync();
         }
     }
 }

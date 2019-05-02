@@ -28,6 +28,7 @@ namespace DiscordBot
             catch (Exception ex)
             {
                 logger.LogException(ex);
+                await connection.DisconnectAsync();
             }
         }
     }
