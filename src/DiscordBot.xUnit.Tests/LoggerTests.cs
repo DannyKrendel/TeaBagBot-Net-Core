@@ -1,5 +1,4 @@
-﻿using System;
-using Xunit;
+﻿using Xunit;
 
 namespace DiscordBot.xUnit.Tests
 {
@@ -11,7 +10,7 @@ namespace DiscordBot.xUnit.Tests
         [InlineData(null)]
         public void Log_ShouldLog_IfValidMessage(string msg)
         {
-            var logger = new Logger();
+            var logger = new ConsoleLogger();
 
             var ex = Record.Exception(() => logger.Log(msg));
 

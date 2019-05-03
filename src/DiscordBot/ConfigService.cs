@@ -4,31 +4,36 @@ using System;
 
 namespace DiscordBot
 {
-    public static class ConfigService
+    public class ConfigService
     {
-        private static readonly string configPath = @"C:\Users\Danny\Source\Repos\DiscordBot\src\DiscordBot\Config\Config";
+        private readonly IDataStorage storage;
 
-        public static BotConfig LoadConfig()
+        public ConfigService(IDataStorage storage)
+        {
+            this.storage = storage;
+        }
+
+        public BotConfig LoadConfig()
         {
             try
             {
-                return Unity.Resolve<IDataStorage>().RestoreObject<BotConfig>(configPath);
+                return storage.RestoreObject<BotConfig>("Config");
             }
             catch (Exception ex)
             {
-                throw new ConfigException($"Couldn't load config from '{configPath}'.", ex);
+                throw new ConfigException($"Couldn't load config.", ex);
             }
         }
 
-        public static void SaveConfig(BotConfig config)
+        public void SaveConfig(BotConfig config)
         {
             try
             {
-                Unity.Resolve<IDataStorage>().StoreObject(config, configPath);
+                storage.StoreObject(config, "Config");
             }
             catch (Exception ex)
             {
-                throw new ConfigException($"Couldn't save config to '{configPath}'.", ex);
+                throw new ConfigException($"Couldn't save config.", ex);
             }
         }
     }

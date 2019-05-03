@@ -6,11 +6,11 @@ namespace DiscordBot
 {
     public class DiscordBot
     {
-        private readonly ILogger logger;
+        private readonly DiscordLogger logger;
         private readonly Connection connection;
         private readonly CommandHandler commandHandler;
 
-        public DiscordBot(ILogger logger, Connection connection, CommandHandler commandHandler)
+        public DiscordBot(DiscordLogger logger, Connection connection, CommandHandler commandHandler)
         {
             this.logger = logger;
             this.connection = connection;
@@ -21,14 +21,15 @@ namespace DiscordBot
         {
             try
             {
-                string token = TokenService.GetToken();
+                string token = Unity.Resolve<TokenService>().GetToken();
                 await connection.ConnectAsync(token);
                 await commandHandler.InitializeAsync();
             }
             catch (Exception ex)
             {
-                logger.LogException(ex);
                 await connection.DisconnectAsync();
+                await logger.LogException(nameof(DiscordBot), ex);
+                Unity.Resolve<DataStorageService>().SaveEverythingToJson();
             }
         }
     }

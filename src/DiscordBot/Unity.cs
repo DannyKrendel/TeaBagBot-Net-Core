@@ -4,6 +4,8 @@ using DiscordBot.Core;
 using DiscordBot.Core.Factories;
 using DiscordBot.Storage.Implementations;
 using DiscordBot.Storage.Interfaces;
+using System;
+using System.Collections.Generic;
 using System.IO.Abstractions;
 using Unity;
 using Unity.Injection;
@@ -27,15 +29,30 @@ namespace DiscordBot
         public static void RegisterTypes()
         {
             container = new UnityContainer();
-            container.RegisterSingleton<IDataStorage, JsonStorage>();
-            container.RegisterSingleton<ILogger, Logger>();
+            container.RegisterSingleton<IFileSystem, FileSystem>();
+            container.RegisterSingleton<IDataStorage, MemoryStorage>();
+            container.RegisterSingleton<MemoryStorage>();
+            container.RegisterSingleton<JsonStorage>();
+            container.RegisterSingleton<DataStorageService>();
+
+            container.RegisterSingleton<ILogger, ConsoleLogger>();
+            container.RegisterSingleton<DiscordLogger>();
+
             container.RegisterFactory<DiscordSocketConfig>(x => SocketConfigFactory.GetDefault());
             container.RegisterFactory<CommandServiceConfig>(x => CommandServiceConfigFactory.GetDefault());
             container.RegisterSingleton<DiscordSocketClient>(new InjectionConstructor(typeof(DiscordSocketConfig)));
+            container.RegisterSingleton<CommandService>(new InjectionConstructor(typeof(CommandServiceConfig)));
+
+            container.RegisterSingleton<ServiceProviderInitializer>();
+            container.RegisterSingleton<EmbedService>();
+            container.RegisterFactory<IServiceProvider>(x => container.Resolve<ServiceProviderInitializer>().BuildServiceProvider());
+            container.RegisterSingleton<CommandManager>();
+            container.RegisterSingleton<CommandEntityService>();
+            container.RegisterSingleton<CommandHandler>();
             container.RegisterSingleton<Connection>();
             container.RegisterSingleton<DiscordBot>();
-            container.RegisterSingleton<IFileSystem, FileSystem>();
-            container.RegisterSingleton<CommandHandler>();
+
+            container.AddExtension(new Diagnostic());
         }
 
         public static T Resolve<T>()

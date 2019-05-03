@@ -9,34 +9,36 @@ namespace DiscordBot.Core
 {
     public class CommandHandler
     {
-        private readonly ILogger logger;
+        private readonly DiscordLogger logger;
         private readonly DiscordSocketClient client;
-        private readonly CommandService service;
+        private readonly CommandService commands;
+        private readonly IServiceProvider services;
 
-        public CommandHandler(ILogger logger, DiscordSocketClient client, CommandService service)
+        public CommandHandler(DiscordLogger logger, DiscordSocketClient client, CommandService commands, IServiceProvider services)
         {
             this.logger = logger;
             this.client = client;
-            this.service = service;
+            this.commands = commands;
+            this.services = services;
         }
 
         public async Task InitializeAsync()
         {
-            await service.AddModulesAsync(Assembly.GetEntryAssembly(), null);
-            client.MessageReceived += HandleMessageAsync;
+            await commands.AddModulesAsync(Assembly.GetEntryAssembly(), services);
+            client.MessageReceived += HandleCommandAsync;
         }
 
-        public async Task HandleMessageAsync(SocketMessage socketMsg)
+        public async Task HandleCommandAsync(SocketMessage socketMsg)
         {
             BotConfig config = null;
 
             try
             {
-                config = ConfigService.LoadConfig();
+                config = Unity.Resolve<ConfigService>().LoadConfig();
             }
             catch (ConfigException ex)
             {
-                logger.LogException(ex);
+                await logger.LogException(nameof(CommandHandler), ex);
                 return;
             }
 
@@ -48,11 +50,11 @@ namespace DiscordBot.Core
                 return;
 
             var context = new SocketCommandContext(client, msg);
-            var result = await service.ExecuteAsync(context, argPos, null);
+            var result = await commands.ExecuteAsync(context, argPos, services);
 
-            if (!result.IsSuccess && result.Error != CommandError.UnknownCommand)
+            if (!result.IsSuccess)
             {
-                logger.Log(result.ErrorReason);
+                await logger.LogCommandResult(result, context);
             }
         }
     }

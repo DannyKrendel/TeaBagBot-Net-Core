@@ -1,6 +1,8 @@
-﻿using Discord.WebSocket;
+﻿using Discord.Commands;
+using Discord.WebSocket;
 using DiscordBot.Core;
 using DiscordBot.Storage.Interfaces;
+using System;
 using System.IO.Abstractions;
 using Xunit;
 
@@ -9,15 +11,30 @@ namespace DiscordBot.xUnit.Tests
     public class UnityTests
     {
         [Fact]
+        public void RegisterTypes_ShouldNotThrow()
+        {
+            var ex = Record.Exception(() => Unity.RegisterTypes());
+
+            Assert.Null(ex);
+        }
+
+        [Fact]
         public void Resolve_ShouldReturnSingleton()
         {
+            Unity.Resolve<DataStorageService>().LoadEverythingToMemory();
+
+            AssertResolvedTypeIsSingleton<IFileSystem>();
             AssertResolvedTypeIsSingleton<IDataStorage>();
             AssertResolvedTypeIsSingleton<ILogger>();
+            AssertResolvedTypeIsSingleton<DiscordLogger>();
             AssertResolvedTypeIsSingleton<DiscordSocketClient>();
+            AssertResolvedTypeIsSingleton<CommandService>();
             AssertResolvedTypeIsSingleton<Connection>();
-            AssertResolvedTypeIsSingleton<DiscordBot>();
-            AssertResolvedTypeIsSingleton<IFileSystem>();
+            AssertResolvedTypeIsSingleton<EmbedService>();
+            AssertResolvedTypeIsSingleton<CommandEntityService>();
+            AssertResolvedTypeIsSingleton<CommandManager>();
             AssertResolvedTypeIsSingleton<CommandHandler>();
+            AssertResolvedTypeIsSingleton<DiscordBot>();
         }
 
         private void AssertResolvedTypeIsSingleton<T>() where T : class

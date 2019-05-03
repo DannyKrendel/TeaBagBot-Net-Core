@@ -9,7 +9,7 @@ namespace DiscordBot.xUnit.Tests
         [Theory]
         [InlineData(null)]
         [InlineData("FakeToken")]
-        public async Task ConnectAsync_ShouldThrowHttpException_IfInvalidToken(string token)
+        public async Task ConnectAsync_ShouldThrowConnectionException_IfInvalidToken(string token)
         {
             var connection = Unity.Resolve<Connection>();
 

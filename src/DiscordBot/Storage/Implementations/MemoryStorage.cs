@@ -7,7 +7,12 @@ namespace DiscordBot.Storage.Implementations
 {
     public class MemoryStorage : IDataStorage
     {
-        private readonly Dictionary<string, object> dictionary = new Dictionary<string, object>();
+        private readonly Dictionary<string, object> dictionary;
+
+        public MemoryStorage()
+        {
+            dictionary = new Dictionary<string, object>();
+        }
 
         public void StoreObject(object obj, string key)
         {

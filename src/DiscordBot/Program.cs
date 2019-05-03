@@ -6,6 +6,7 @@ namespace DiscordBot.Extensions
     {
         private static async Task Main()
         {
+            Unity.Resolve<DataStorageService>().LoadEverythingToMemory();
             var bot = Unity.Resolve<DiscordBot>();
             await bot.StartAsync();
             await Task.Delay(-1);

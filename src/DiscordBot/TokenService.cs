@@ -3,19 +3,24 @@ using System;
 
 namespace DiscordBot
 {
-    public static class TokenService
+    public class TokenService
     {
-        private static readonly string tokenPath = @"C:\Users\Danny\Source\Repos\DiscordBot\src\DiscordBot\Config\Token";
+        private readonly IDataStorage storage;
 
-        public static string GetToken()
+        public TokenService(IDataStorage storage)
+        {
+            this.storage = storage;
+        }
+
+        public string GetToken()
         {
             try
             {
-                return Unity.Resolve<IDataStorage>().RestoreObject<string>(tokenPath);
+                return storage.RestoreObject<string>("Token");
             }
             catch (Exception ex)
             {
-                throw new TokenException($"Couldn't load token from '{tokenPath}'.", ex);
+                throw new TokenException($"Couldn't load token.", ex);
             }
         }
     }
