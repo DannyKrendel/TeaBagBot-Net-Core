@@ -2,7 +2,7 @@
 
 namespace DiscordBot
 {
-    public class Logger : ILogger
+    public class ConsoleLogger : ILogger
     {
         public void Log(string message)
         {
@@ -14,11 +14,7 @@ namespace DiscordBot
 
         public void LogException(Exception ex)
         {
-            while (ex != null)
-            {
-                Console.WriteLine(ex.Message + "\n" + ex.StackTrace);
-                ex = ex.InnerException;
-            }
+            Console.WriteLine(ex);
         }
     }
 }
