@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Security.Cryptography;
 
 namespace DiscordBot
@@ -26,6 +28,11 @@ namespace DiscordBot
             double randomValueInRange = Math.Floor(multiplier * range);
 
             return (int)(minimumValue + randomValueInRange);
+        }
+
+        public static T GetRandomFrom<T>(IEnumerable<T> collection)
+        {
+            return collection.ElementAt(GetRandom(0, collection.Count() - 1));
         }
     }
 }
