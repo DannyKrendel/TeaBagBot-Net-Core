@@ -55,6 +55,7 @@ namespace DiscordBot
             container.RegisterSingleton<CommandHandler>();
             container.RegisterSingleton<Connection>();
             container.RegisterSingleton<DiscordBot>();
+            container.RegisterSingleton<ConsoleHandler>();
 
             container.AddExtension(new Diagnostic());
         }

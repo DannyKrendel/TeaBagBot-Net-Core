@@ -9,7 +9,6 @@ namespace DiscordBot.Extensions
             Unity.Resolve<DataStorageService>().LoadEverythingToMemory();
             var bot = Unity.Resolve<DiscordBot>();
             await bot.StartAsync();
-            await Task.Delay(-1);
         }
     }
 }
