@@ -31,13 +31,13 @@ namespace DiscordBot.Core.Logging
 
         public async Task LogWarningAsync(string source, string message)
         {
-            logger.Log(new BotLogMessage(BotLogSeverity.Info, source, message));
+            logger.Log(new BotLogMessage(BotLogSeverity.Warning, source, message));
             await Task.CompletedTask;
         }
 
         public async Task LogInfoAsync(string source, string message)
         {
-            logger.Log(new BotLogMessage(BotLogSeverity.Warning, source, message));
+            logger.Log(new BotLogMessage(BotLogSeverity.Info, source, message));
             await Task.CompletedTask;
         }
 
