@@ -15,13 +15,15 @@ namespace DiscordBot.Core.Modules
         private readonly EmbedService embedService;
         private readonly CommandManager commandManager;
         private readonly ConfigService configService;
+        private readonly CommandParser commandParser;
 
-        public StandardModule(DiscordSocketClient client, EmbedService embedService, CommandManager commandManager, ConfigService configService)
+        public StandardModule(DiscordSocketClient client, EmbedService embedService, CommandManager commandManager, ConfigService configService, CommandParser commandParser)
         {
             this.client = client;
             this.embedService = embedService;
             this.commandManager = commandManager;
             this.configService = configService;
+            this.commandParser = commandParser;
         }
 
         [CustomCommand("help")]
@@ -121,8 +123,8 @@ namespace DiscordBot.Core.Modules
             }
             else
             {
-                string response = responses[RandomGenerator.GetRandom(0, responses.Count())];
-                embed = embedService.GetInfoEmbed(":8ball:", response);
+                string response = commandParser.Parse(RandomGenerator.GetRandomFrom(responses), Context);
+                embed = embedService.GetInfoEmbed(":8ball: Предсказание :8ball:", response);
             }
 
             await ReplyAsync(embed: embed);
