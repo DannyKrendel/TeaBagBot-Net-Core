@@ -33,12 +33,7 @@ namespace DiscordBot.Core
 
         public async Task OnCommandExecutedAsync(Optional<CommandInfo> command, ICommandContext context, IResult result)
         {
-            if (result.Error.HasValue)
-            {
-                await logger.LogCommandErrorAsync(result, context);
-            }
-
-            await logger.LogCommandResultAsync(command, context);
+            await logger.LogCommandResultAsync(command, context, result);
         }
 
         public async Task HandleCommandAsync(SocketMessage socketMsg)
