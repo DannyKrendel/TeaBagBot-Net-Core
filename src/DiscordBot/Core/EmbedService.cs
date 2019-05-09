@@ -5,7 +5,7 @@ namespace DiscordBot.Core
 {
     public class EmbedService
     {
-        public Embed GetInfoEmbed(string title, string description,
+        private Embed GetEmbed(Color color, string title = null, string description = null,
             Action<EmbedFooterBuilder> footerBuilder = null,
             EmbedFieldBuilder[] fieldBuilders = null,
             Action<EmbedAuthorBuilder> authorBuilder = null)
@@ -15,7 +15,7 @@ namespace DiscordBot.Core
             embedBuilder
                 .WithTitle(title)
                 .WithDescription(description)
-                .WithColor(new Color(0, 255, 100));
+                .WithColor(color);
 
             if (footerBuilder != null)
                 embedBuilder.WithFooter(footerBuilder);
@@ -27,16 +27,28 @@ namespace DiscordBot.Core
             return embedBuilder.Build();
         }
 
-        public Embed GetErrorEmbed(string title, string description)
+        public Embed GetInfoEmbed(string title, string description = null,
+            Action<EmbedFooterBuilder> footerBuilder = null,
+            EmbedFieldBuilder[] fieldBuilders = null,
+            Action<EmbedAuthorBuilder> authorBuilder = null)
         {
-            var embedBuilder = new EmbedBuilder();
+            return GetEmbed(new Color(0, 255, 100), title, description, footerBuilder, fieldBuilders, authorBuilder);
+        }
 
-            embedBuilder
-                .WithTitle(title)
-                .WithDescription(description)
-                .WithColor(new Color(255, 0, 0));
+        public Embed GetErrorEmbed(string title, string description = null,
+            Action<EmbedFooterBuilder> footerBuilder = null,
+            EmbedFieldBuilder[] fieldBuilders = null,
+            Action<EmbedAuthorBuilder> authorBuilder = null)
+        {
+            return GetEmbed(new Color(255, 0, 0), title, description, footerBuilder, fieldBuilders, authorBuilder);
+        }
 
-            return embedBuilder.Build();
+        public Embed GetWarningEmbed(string title, string description = null,
+            Action<EmbedFooterBuilder> footerBuilder = null,
+            EmbedFieldBuilder[] fieldBuilders = null,
+            Action<EmbedAuthorBuilder> authorBuilder = null)
+        {
+            return GetEmbed(new Color(255, 255, 0), title, description, footerBuilder, fieldBuilders, authorBuilder);
         }
     }
 }
