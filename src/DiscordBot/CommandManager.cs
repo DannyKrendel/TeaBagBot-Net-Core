@@ -1,4 +1,5 @@
-﻿using DiscordBot.Core.Entities;
+﻿using DiscordBot.Core;
+using DiscordBot.Core.Entities;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -6,21 +7,43 @@ namespace DiscordBot
 {
     public class CommandManager
     {
-        private readonly List<CommandEntity> commands;
+        public List<CommandGroup> CommandGroups { get; }
 
         public CommandManager(CommandEntityService commandEntityService)
         {
-            commands = commandEntityService.LoadCommands();
+            CommandGroups = commandEntityService.LoadCommands().ToList();
         }
 
-        public CommandEntity GetCommand(string name)
+        public IEnumerable<CommandData> GetCommands(PermissionGroup group)
         {
-            return commands.First(c => c.Name == name);
+            return CommandGroups.First(cg => cg.Group == group).Commands;
         }
 
-        public void AddCommand(CommandEntity command)
+        public CommandData GetCommand(string name, PermissionGroup? group = null)
         {
-            commands.Add(command);
+            if (group.HasValue)
+            {
+                var g = CommandGroups.FirstOrDefault(cg => cg.Group == group);
+                if (g.Commands.Count() != 0)
+                {
+                    return g.Commands.FirstOrDefault(c => c.Name.ToLower() == name.ToLower());
+                }
+            }
+            else
+            {
+                foreach (var g in CommandGroups)
+                {
+                    if (g.Commands.Count() != 0)
+                    {
+                        CommandData command = g.Commands.FirstOrDefault(c => c.Name.ToLower() == name.ToLower());
+                        if (command != null)
+                        {
+                            return command;
+                        }
+                    }
+                }
+            }
+            return null;
         }
     }
 }

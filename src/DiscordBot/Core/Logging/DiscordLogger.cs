@@ -1,9 +1,10 @@
 ﻿using Discord;
 using Discord.Commands;
+using DiscordBot.Core.Logging.Entities;
 using System;
 using System.Threading.Tasks;
 
-namespace DiscordBot.Core
+namespace DiscordBot.Core.Logging
 {
     public class DiscordLogger
     {
@@ -14,23 +15,26 @@ namespace DiscordBot.Core
             this.logger = logger;
         }
 
-        public async Task Log(LogMessage logMsg)
+        internal async Task LogAsync(LogMessage logMsg)
         {
-            logger.Log(logMsg.ToString());
-
+            logger.Log(LogMessageConverter.ToBotLogMessage(logMsg));
             await Task.CompletedTask;
         }
 
-        public async Task LogException(string source, Exception ex)
+        public async Task LogErrorAsync(string source, Exception exception)
         {
-            await Log(new LogMessage(LogSeverity.Error, source, null, ex));
+            logger.Log(new BotLogMessage(BotLogSeverity.Error, source, null, exception));
+            await Task.CompletedTask;
         }
 
-        public async Task LogCommandResult(IResult result, SocketCommandContext context)
+        public async Task LogWarningAsync(string source, string message)
         {
-            if (result.Error is null)
-                return;
+            logger.Log(new BotLogMessage(BotLogSeverity.Warning, source, message));
+            await Task.CompletedTask;
+        }
 
+        public async Task LogCommandErrorAsync(IResult result, ICommandContext context)
+        {
             string reason = "";
 
             switch (result.Error)
@@ -54,7 +58,7 @@ namespace DiscordBot.Core
                     reason = result.ErrorReason;
                     break;
                 case CommandError.Exception:
-                    reason = result.ErrorReason;
+                    reason = $"Возникло исключение: {result.ErrorReason}";
                     break;
                 case CommandError.Unsuccessful:
                     reason = result.ErrorReason;
@@ -62,6 +66,18 @@ namespace DiscordBot.Core
             }
 
             await context.Channel.SendMessageAsync(reason);
+            await LogWarningAsync("Command", reason);
+        }
+
+        public async Task LogCommandResultAsync(Optional<CommandInfo> command, ICommandContext context)
+        {
+            var commandName = command.IsSpecified ? command.Value.Name : "Unknown command";
+            var user = context.User;
+
+            await LogAsync(new LogMessage(
+                LogSeverity.Info,
+                "Command",
+                $"{commandName} was executed by {user}."));
         }
     }
 }

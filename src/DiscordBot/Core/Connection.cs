@@ -1,5 +1,6 @@
 ﻿using Discord;
 using Discord.WebSocket;
+using DiscordBot.Core.Logging;
 using System;
 using System.Threading.Tasks;
 
@@ -18,7 +19,7 @@ namespace DiscordBot.Core
 
         public async Task ConnectAsync(string token)
         {
-            client.Log += logger.Log;
+            client.Log += logger.LogAsync;
 
             try
             {

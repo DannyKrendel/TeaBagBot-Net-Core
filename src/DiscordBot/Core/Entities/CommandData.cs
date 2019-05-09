@@ -1,16 +1,15 @@
 ﻿namespace DiscordBot.Core.Entities
 {
-    public class CommandEntity
+    public class CommandData
     {
         public string Name { get; set; }
         public string Description { get; set; }
         public string[] Aliases { get; set; }
-        public ArgEntity Args { get; set; }
+        public ArgData Args { get; set; }
         public string[] Responses { get; set; }
-        public ulong Permissions { get; set; }
     }
 
-    public class ArgEntity
+    public class ArgData
     {
         public string Name { get; set; }
         public string Description { get; set; }

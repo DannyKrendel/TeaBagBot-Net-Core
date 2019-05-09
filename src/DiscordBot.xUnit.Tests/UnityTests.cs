@@ -1,8 +1,8 @@
 ﻿using Discord.Commands;
 using Discord.WebSocket;
 using DiscordBot.Core;
+using DiscordBot.Core.Logging;
 using DiscordBot.Storage.Interfaces;
-using System;
 using System.IO.Abstractions;
 using Xunit;
 

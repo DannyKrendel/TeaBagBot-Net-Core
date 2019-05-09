@@ -16,17 +16,29 @@ namespace DiscordBot.Storage.Implementations
             this.fileSystem = fileSystem;
         }
 
-        public T RestoreObject<T>(string path)
+        public void StoreObject(object obj, string path)
         {
-            if (path is null)
-                throw new ArgumentNullException(nameof(path), "Path was null.");
-
-            if (!fileSystem.Path.IsPathFullyQualified(path))
-                throw new ArgumentException($"Invalid path: '{path}'. It must by fully qualified.", nameof(path));
+            ValidatePath(ref path);
 
             try
             {
-                string json = fileSystem.File.ReadAllText($"{path}.json");
+                fileSystem.Directory.CreateDirectory(fileSystem.Path.GetDirectoryName(path));
+                var json = JsonConvert.SerializeObject(obj, Formatting.Indented);
+                fileSystem.File.WriteAllText(path, json);
+            }
+            catch (Exception ex)
+            {
+                throw new JsonStorageException($"Couldn't store object '{nameof(obj)}' to '{path}'.", ex);
+            }
+        }
+
+        public T RestoreObject<T>(string path)
+        {
+            ValidatePath(ref path);
+
+            try
+            {
+                string json = fileSystem.File.ReadAllText(path);
                 return JsonConvert.DeserializeObject<T>(json);
             }
             catch (Exception ex)
@@ -35,7 +47,7 @@ namespace DiscordBot.Storage.Implementations
             }
         }
 
-        public void StoreObject(object obj, string path)
+        private void ValidatePath(ref string path)
         {
             if (path is null)
                 throw new ArgumentNullException(nameof(path), "Path was null.");
@@ -43,18 +55,8 @@ namespace DiscordBot.Storage.Implementations
             if (!fileSystem.Path.IsPathFullyQualified(path))
                 throw new ArgumentException($"Invalid path: '{path}'. It must by fully qualified.", nameof(path));
 
-            string file = $"{path}.json";
-
-            try
-            {
-                fileSystem.Directory.CreateDirectory(fileSystem.Path.GetDirectoryName(file));
-                var json = JsonConvert.SerializeObject(obj, Formatting.Indented);
-                fileSystem.File.WriteAllText(file, json);
-            }
-            catch (Exception ex)
-            {
-                throw new JsonStorageException($"Couldn't store object '{nameof(obj)}' to '{path}'.", ex);
-            }
+            if (!path.EndsWith(".json"))
+                path = $"{path}.json";
         }
     }
 }

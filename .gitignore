@@ -343,3 +343,6 @@ healthchecksdb
 
 # Bot Config
 src/DiscordBot/Config/
+
+# Bot Commands
+src/DiscordBot/Commands/

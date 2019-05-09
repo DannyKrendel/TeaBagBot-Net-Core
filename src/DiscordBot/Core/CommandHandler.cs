@@ -1,6 +1,8 @@
-﻿using Discord.Commands;
+﻿using Discord;
+using Discord.Commands;
 using Discord.WebSocket;
 using DiscordBot.Core.Entities;
+using DiscordBot.Core.Logging;
 using System;
 using System.Reflection;
 using System.Threading.Tasks;
@@ -24,21 +26,31 @@ namespace DiscordBot.Core
 
         public async Task InitializeAsync()
         {
-            await commands.AddModulesAsync(Assembly.GetEntryAssembly(), services);
             client.MessageReceived += HandleCommandAsync;
+            commands.CommandExecuted += OnCommandExecutedAsync;
+            await commands.AddModulesAsync(Assembly.GetEntryAssembly(), services);
+        }
+
+        public async Task OnCommandExecutedAsync(Optional<CommandInfo> command, ICommandContext context, IResult result)
+        {
+            if (result.Error.HasValue)
+            {
+                await logger.LogCommandErrorAsync(result, context);
+            }
+
+            await logger.LogCommandResultAsync(command, context);
         }
 
         public async Task HandleCommandAsync(SocketMessage socketMsg)
         {
-            BotConfig config = null;
-
+            BotConfig config;
             try
             {
                 config = Unity.Resolve<ConfigService>().LoadConfig();
             }
             catch (ConfigException ex)
             {
-                await logger.LogException(nameof(CommandHandler), ex);
+                await logger.LogErrorAsync("Command", ex);
                 return;
             }
 
@@ -50,12 +62,7 @@ namespace DiscordBot.Core
                 return;
 
             var context = new SocketCommandContext(client, msg);
-            var result = await commands.ExecuteAsync(context, argPos, services);
-
-            if (!result.IsSuccess)
-            {
-                await logger.LogCommandResult(result, context);
-            }
+            await commands.ExecuteAsync(context, argPos, services);
         }
     }
 }

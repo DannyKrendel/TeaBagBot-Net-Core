@@ -1,4 +1,6 @@
-﻿using Xunit;
+﻿using DiscordBot.Core.Logging.Entities;
+using DiscordBot.Logging;
+using Xunit;
 
 namespace DiscordBot.xUnit.Tests
 {
@@ -12,7 +14,7 @@ namespace DiscordBot.xUnit.Tests
         {
             var logger = new ConsoleLogger();
 
-            var ex = Record.Exception(() => logger.Log(msg));
+            var ex = Record.Exception(() => logger.Log(new BotLogMessage(BotLogSeverity.Info, null, msg)));
 
             Assert.Null(ex);
         }

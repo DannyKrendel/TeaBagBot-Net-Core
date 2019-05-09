@@ -1,4 +1,5 @@
 ﻿using DiscordBot.Core;
+using DiscordBot.Core.Logging;
 using System;
 using System.Threading.Tasks;
 
@@ -21,14 +22,17 @@ namespace DiscordBot
         {
             try
             {
+                AttributeUtilities.TryLoadAttributes();
+
                 string token = Unity.Resolve<TokenService>().GetToken();
-                await connection.ConnectAsync(token);
-                await commandHandler.InitializeAsync();
+                var connect = connection.ConnectAsync(token);
+                var command = commandHandler.InitializeAsync();
+                await connect.ContinueWith(async t => await command);
             }
             catch (Exception ex)
             {
                 await connection.DisconnectAsync();
-                await logger.LogException(nameof(DiscordBot), ex);
+                await logger.LogErrorAsync("Discord", ex);
                 Unity.Resolve<DataStorageService>().SaveEverythingToJson();
             }
         }

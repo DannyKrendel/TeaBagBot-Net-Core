@@ -14,11 +14,11 @@ namespace DiscordBot
             this.storage = storage;
         }
 
-        public List<CommandEntity> LoadCommands()
+        public IEnumerable<CommandGroup> LoadCommands()
         {
             try
             {
-                return storage.RestoreObject<List<CommandEntity>>("Commands");
+                return storage.RestoreObject<IEnumerable<CommandGroup>>("CommandGroups");
             }
             catch (Exception ex)
             {
@@ -26,11 +26,11 @@ namespace DiscordBot
             }
         }
 
-        public void SaveCommands(List<CommandEntity> commands)
+        public void SaveCommands(IEnumerable<CommandGroup> commandGroups)
         {
             try
             {
-                storage.StoreObject(commands, "Commands");
+                storage.StoreObject(commandGroups, "CommandGroups");
             }
             catch (Exception ex)
             {
