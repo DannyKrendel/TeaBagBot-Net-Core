@@ -28,11 +28,11 @@ namespace DiscordBot.Core.Modules
         {
             if (newPrefix == null)
             {
-                await ReplyAsync($"Текущий префикс: **{configService.LoadConfig().Prefix}**.");
+                await ReplyAsync($"Текущий префикс: `{configService.LoadConfig().Prefix}`");
             }
             else if (newPrefix.Length >= 2)
             {
-                await ReplyAsync($"{Context.User.Mention}, длина префикса превышать 2 символа.");
+                await ReplyAsync($"{Context.User.Mention}, длина префикса не должна превышать 2 символа.");
             }
             else
             {
@@ -40,7 +40,7 @@ namespace DiscordBot.Core.Modules
                 config.Prefix = newPrefix;
                 configService.SaveConfig(config);
 
-                await ReplyAsync($"{Context.User.Mention}, префикс изменён на **{newPrefix}**.");
+                await ReplyAsync($"{Context.User.Mention}, префикс изменён на `{newPrefix}`");
             }
         }
     }
