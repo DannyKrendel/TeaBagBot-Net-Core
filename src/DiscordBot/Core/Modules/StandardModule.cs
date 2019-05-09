@@ -3,6 +3,7 @@ using Discord.Commands;
 using Discord.WebSocket;
 using DiscordBot.Core.Attributes;
 using DiscordBot.Core.Entities;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace DiscordBot.Core.Modules
@@ -52,13 +53,13 @@ namespace DiscordBot.Core.Modules
                 string commandInfo = $"**{commandManager.GetCommand("help").Description}**\n";
 
                 commandInfo += "Список стандартных команд:\n```\n";
-                foreach (var command in commandManager.GetCommands(PermissionGroup.Standard))
+                foreach (var command in commandManager.GetCommands(PermissionGroup.Standard).OrderBy(s => s.Name))
                 {
                     commandInfo += GetCommandInfo(command);
                 }
                 commandInfo += "\n```\n";
                 commandInfo += "Список админских команд:\n```\n";
-                foreach (var command in commandManager.GetCommands(PermissionGroup.Admin))
+                foreach (var command in commandManager.GetCommands(PermissionGroup.Admin).OrderBy(s => s.Name))
                 {
                     commandInfo += GetCommandInfo(command);
                 }
@@ -72,7 +73,7 @@ namespace DiscordBot.Core.Modules
 
                 if (command == null)
                 {
-                    await ReplyAsync($"{Context.User.Mention}, такой команды не существует.");
+                    embed = embedService.GetErrorEmbed("Ошибка!", $"{Context.User.Mention}, такой команды не существует.");
                 }
                 else
                 {
@@ -80,7 +81,7 @@ namespace DiscordBot.Core.Modules
                         "\n```\n" +
                         command.Description +
                         "\n```\n" +
-                        "Псведонимы:" +
+                        "Псевдонимы:" +
                         "\n```\n" +
                         GetFormattedArray(command.Aliases) +
                         "\n```\n";
@@ -97,7 +98,7 @@ namespace DiscordBot.Core.Modules
         {
             var embed = embedService.GetInfoEmbed(message, "");
 
-            await ReplyAsync(embed: embed);
+            await ReplyAsync(message);
         }
 
         [CustomCommand("ping")]
