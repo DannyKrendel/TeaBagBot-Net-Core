@@ -107,5 +107,25 @@ namespace DiscordBot.Core.Modules
         {
             await ReplyAsync($"{Context.User.Mention}, понг! ({client.Latency}мс)");
         }
+
+        [CustomCommand("8ball")]
+        [CustomAlias("8ball")]
+        public async Task Ball([Remainder]string question)
+        {
+            var responses = commandManager.GetCommand("8ball").Responses;
+            Embed embed = null;
+
+            if (responses.Count() == 0)
+            {
+                embed = embedService.GetErrorEmbed("Ошибка!", "Ответов не нашлось.");
+            }
+            else
+            {
+                string response = responses[RandomGenerator.GetRandom(0, responses.Count())];
+                embed = embedService.GetInfoEmbed(":8ball:", response);
+            }
+
+            await ReplyAsync(embed: embed);
+        }
     }
 }
