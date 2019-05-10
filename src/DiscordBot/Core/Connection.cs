@@ -34,6 +34,8 @@ namespace DiscordBot.Core
 
         public async Task DisconnectAsync()
         {
+            client.Log -= logger.LogAsync;
+
             await client.LogoutAsync();
             await client.StopAsync();
         }
