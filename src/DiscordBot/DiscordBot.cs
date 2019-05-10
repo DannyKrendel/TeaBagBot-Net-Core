@@ -1,6 +1,7 @@
 ﻿using DiscordBot.Core;
 using DiscordBot.Core.Logging;
 using System;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace DiscordBot
@@ -12,6 +13,8 @@ namespace DiscordBot
         private readonly CommandHandler commandHandler;
         private readonly ConsoleHandler consoleHandler;
 
+        private readonly CancellationTokenSource cancelTokenSource;
+
         public DiscordBot(DiscordLogger logger, Connection connection, CommandHandler commandHandler, ConsoleHandler consoleHandler)
         {
             this.logger = logger;
@@ -22,17 +25,49 @@ namespace DiscordBot
 
         public async Task StartAsync()
         {
+            bool exit;
+            bool restart;
+
             try
             {
-                AttributeUtilities.TryLoadAttributes();
-
                 string token = Unity.Resolve<TokenService>().GetToken();
-                var connect = connection.ConnectAsync(token);
-                var command = commandHandler.InitializeAsync();
-                var console = consoleHandler.CheckMessagesAsync();
-                await connect.ContinueWith(async t => await command);
 
-                await console;
+                do
+                {
+                    exit = restart = false;
+
+                    AttributeUtilities.TryLoadAttributes();
+
+                    var connect = connection.ConnectAsync(token);
+                    var command = commandHandler.InitializeAsync();
+                    await connect.ContinueWith(async t => await command);
+
+                    do
+                    {
+                        var consoleCommand = await consoleHandler.CheckMessagesAsync();
+                        if (!consoleCommand.Item1.HasValue)
+                        {
+                            await logger.LogWarningAsync("Console", "Неверная консольная команда.");
+                        }
+                        else
+                        {
+                            switch (consoleCommand.Item1.Value)
+                            {
+                                case ConsoleCommand.Exit:
+                                    exit = true;
+                                    break;
+                                case ConsoleCommand.Restart:
+                                    restart = true;
+                                    break;
+                                case ConsoleCommand.Say:
+                                    break;
+                            }
+                        }
+                    } while (exit == false && restart == false);
+
+                    Unity.Resolve<DataStorageService>().SaveEverythingToJson();
+                    await connection.DisconnectAsync();
+                } while (restart);
             }
             catch (Exception ex)
             {
@@ -40,8 +75,8 @@ namespace DiscordBot
             }
             finally
             {
-                await connection.DisconnectAsync();
                 Unity.Resolve<DataStorageService>().SaveEverythingToJson();
+                await connection.DisconnectAsync();
             }
         }
     }

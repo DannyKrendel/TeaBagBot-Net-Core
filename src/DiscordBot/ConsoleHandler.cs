@@ -1,6 +1,7 @@
 ﻿using DiscordBot.Core.Logging;
 using DiscordBot.Core.Logging.Entities;
 using System;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace DiscordBot
@@ -14,27 +15,26 @@ namespace DiscordBot
             this.logger = logger;
         }
 
-        public async Task CheckMessagesAsync()
+        public async Task<(ConsoleCommand?, string)> CheckMessagesAsync()
         {
             string msg = "";
 
-            await Task.Run(() =>
+            return await Task.Run(() =>
             {
-                do
-                {
-                    msg = Console.ReadLine();
-
-                    if (msg == "exit")
-                        break;
-
-                    HandleMessage(msg);
-                } while (true);
+                msg = Console.ReadLine(); 
+                return HandleMessage(msg);
             });
         }
 
-        public void HandleMessage(string msg)
+        public (ConsoleCommand?, string) HandleMessage(string msg)
         {
-            logger.Log(new BotLogMessage(BotLogSeverity.Info, "Console", msg));
+            var commands = Enum.GetValues(typeof(ConsoleCommand)).OfType<ConsoleCommand>();
+            string command = msg.Split(new char[] { ' ' })[0].ToLower();
+
+            if (!commands.Select(n => n.ToString().ToLower()).Contains(command))
+                return (null, msg);
+
+            return (commands.First(n => n.ToString().ToLower() == command.ToLower()), "");
         }
     }
 }
