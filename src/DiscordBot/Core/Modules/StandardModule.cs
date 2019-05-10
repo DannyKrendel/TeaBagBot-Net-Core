@@ -3,6 +3,7 @@ using Discord.Commands;
 using Discord.WebSocket;
 using DiscordBot.Core.Attributes;
 using DiscordBot.Core.Entities;
+using System;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -94,12 +95,13 @@ namespace DiscordBot.Core.Modules
             await ReplyAsync(embed: embed);
         }
 
-        [CustomCommand("echo")]
-        [CustomAlias("echo")]
-        public async Task Echo([Remainder]string message)
+        [CustomCommand("say")]
+        [CustomAlias("say")]
+        public async Task Say([Remainder]string message)
         {
             var embed = embedService.GetInfoEmbed(message, "");
 
+            await Context.Message.DeleteAsync();
             await ReplyAsync(message);
         }
 
@@ -119,12 +121,32 @@ namespace DiscordBot.Core.Modules
 
             if (responses.Count() == 0)
             {
-                embed = embedService.GetErrorEmbed("Ошибка!", "Ответов не нашлось.");
+                embed = embedService.GetErrorEmbed("Ошибка!", "Не найдено ответов.");
             }
             else
             {
                 string response = commandParser.Parse(RandomGenerator.GetRandomFrom(responses), Context);
                 embed = embedService.GetInfoEmbed(":8ball: Предсказание :8ball:", response);
+            }
+
+            await ReplyAsync(embed: embed);
+        }
+
+        [CustomCommand("pick")]
+        [CustomAlias("pick")]
+        public async Task Pick([Remainder]string message)
+        {
+            string[] options = message.Split(new char[] { '|' }, StringSplitOptions.RemoveEmptyEntries);
+            Embed embed = null;
+
+            if (options.Length == 0)
+            {
+                embed = embedService.GetErrorEmbed("Ошибка!", "Не найдено вариантов.");
+            }
+            else
+            {
+                string selection = RandomGenerator.GetRandomFrom(options);
+                embed = embedService.GetInfoEmbed(":eyes: Выбор :eyes:", $"Мой выбор пал на... `{selection}`");
             }
 
             await ReplyAsync(embed: embed);
