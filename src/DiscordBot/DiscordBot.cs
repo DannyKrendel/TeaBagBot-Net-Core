@@ -1,4 +1,5 @@
-﻿using DiscordBot.Core;
+﻿using DiscordBot.ConsoleUtilities;
+using DiscordBot.Core;
 using DiscordBot.Core.Logging;
 using System;
 using System.Threading;
@@ -27,14 +28,22 @@ namespace DiscordBot
         {
             bool exit;
             bool restart;
+            string token = "";
 
             try
             {
-                string token = Unity.Resolve<TokenService>().GetToken();
+                token = Unity.Resolve<TokenService>().GetToken();
+            }
+            catch (TokenException ex)
+            {
+                await logger.LogErrorAsync("Discord", ex);
+            }
 
-                do
+            do
+            {
+                exit = restart = false;
+                try
                 {
-                    exit = restart = false;
 
                     AttributeUtilities.TryLoadAttributes();
 
@@ -64,20 +73,17 @@ namespace DiscordBot
                             }
                         }
                     } while (exit == false && restart == false);
-
+                }
+                catch (Exception ex)
+                {
+                    await logger.LogErrorAsync("Discord", ex);
+                }
+                finally
+                {
                     Unity.Resolve<DataStorageService>().SaveEverythingToJson();
                     await connection.DisconnectAsync();
-                } while (restart);
-            }
-            catch (Exception ex)
-            {
-                await logger.LogErrorAsync("Discord", ex);
-            }
-            finally
-            {
-                Unity.Resolve<DataStorageService>().SaveEverythingToJson();
-                await connection.DisconnectAsync();
-            }
+                }
+            } while (restart);
         }
     }
 }

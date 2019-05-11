@@ -26,7 +26,7 @@ namespace DiscordBot.Core
 
         public async Task InitializeAsync()
         {
-            client.MessageReceived += HandleCommandAsync;
+            client.MessageReceived += HandleMessageAsync;
             commands.CommandExecuted += OnCommandExecutedAsync;
             await commands.AddModulesAsync(Assembly.GetEntryAssembly(), services);
         }
@@ -36,7 +36,7 @@ namespace DiscordBot.Core
             await logger.LogCommandResultAsync(command, context, result);
         }
 
-        public async Task HandleCommandAsync(SocketMessage socketMsg)
+        public async Task HandleMessageAsync(SocketMessage socketMsg)
         {
             BotConfig config;
             try

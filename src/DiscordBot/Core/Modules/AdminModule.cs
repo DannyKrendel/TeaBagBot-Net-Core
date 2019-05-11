@@ -1,7 +1,6 @@
 ﻿using Discord.Commands;
 using Discord.WebSocket;
 using DiscordBot.Core.Attributes;
-using DiscordBot.Core.Entities;
 using System.Threading.Tasks;
 
 namespace DiscordBot.Core.Modules

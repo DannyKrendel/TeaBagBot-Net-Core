@@ -1,4 +1,4 @@
-﻿namespace DiscordBot
+﻿namespace DiscordBot.ConsoleUtilities
 {
     public enum ConsoleCommand
     {

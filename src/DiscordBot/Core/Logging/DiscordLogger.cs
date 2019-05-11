@@ -83,7 +83,7 @@ namespace DiscordBot.Core.Logging
 
                 var embed = embedService.GetErrorEmbed("Ошибка!", reason);
                 await context.Channel.SendMessageAsync(embed: embed);
-                await LogWarningAsync("Command", log); 
+                await LogWarningAsync("Command", log);
             }
 
             var commandName = command.IsSpecified ? command.Value.Name : "Неизвестная команда";

@@ -1,10 +1,9 @@
 ﻿using DiscordBot.Core.Logging;
-using DiscordBot.Core.Logging.Entities;
 using System;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace DiscordBot
+namespace DiscordBot.ConsoleUtilities
 {
     public class ConsoleHandler
     {
@@ -21,7 +20,7 @@ namespace DiscordBot
 
             return await Task.Run(() =>
             {
-                msg = Console.ReadLine(); 
+                msg = Console.ReadLine();
                 return HandleMessage(msg);
             });
         }

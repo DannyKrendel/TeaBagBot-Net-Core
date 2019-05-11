@@ -1,5 +1,4 @@
 ﻿using Discord.WebSocket;
-using DiscordBot.Core.Entities;
 using Microsoft.Extensions.DependencyInjection;
 using System;
 
@@ -13,7 +12,7 @@ namespace DiscordBot.Core
         private readonly ConfigService configService;
         private readonly CommandParser commandParser;
 
-        public ServiceProviderInitializer(DiscordSocketClient client, EmbedService embedService, 
+        public ServiceProviderInitializer(DiscordSocketClient client, EmbedService embedService,
             CommandManager commandManager, ConfigService config, CommandParser commandParser)
         {
             this.client = client;
