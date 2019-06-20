@@ -1,6 +1,5 @@
-﻿using DiscordBot.Storage.Exceptions;
-using DiscordBot.Storage.Implementations;
-using DiscordBot.Storage.Interfaces;
+﻿using DiscordBot.Storage;
+using DiscordBot.Storage.Memory;
 using System;
 using Xunit;
 

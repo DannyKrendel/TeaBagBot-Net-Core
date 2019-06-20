@@ -12,19 +12,19 @@ namespace DiscordBot.Core.Modules
     [RequirePermissions(PermissionGroup.Standard)]
     public class StandardModule : ModuleBase<SocketCommandContext>
     {
-        private readonly DiscordSocketClient client;
-        private readonly EmbedService embedService;
-        private readonly CommandManager commandManager;
-        private readonly ConfigService configService;
-        private readonly CommandParser commandParser;
+        private readonly DiscordSocketClient _client;
+        private readonly EmbedService _embedService;
+        private readonly CommandManager _commandManager;
+        private readonly ConfigService _configService;
+        private readonly CommandParser _commandParser;
 
         public StandardModule(DiscordSocketClient client, EmbedService embedService, CommandManager commandManager, ConfigService configService, CommandParser commandParser)
         {
-            this.client = client;
-            this.embedService = embedService;
-            this.commandManager = commandManager;
-            this.configService = configService;
-            this.commandParser = commandParser;
+            _client = client;
+            _embedService = embedService;
+            _commandManager = commandManager;
+            _configService = configService;
+            _commandParser = commandParser;
         }
 
         [CustomCommand("help")]
@@ -53,30 +53,30 @@ namespace DiscordBot.Core.Modules
 
             if (commandName == null)
             {
-                string commandInfo = $"**{commandManager.GetCommand("help").Description}**\n";
+                string commandInfo = $"**{_commandManager.GetCommand("help").Description}**\n";
 
                 commandInfo += "Список стандартных команд:\n```\n";
-                foreach (var command in commandManager.GetCommands(PermissionGroup.Standard).OrderBy(s => s.Name))
+                foreach (var command in _commandManager.GetCommands(PermissionGroup.Standard).OrderBy(s => s.Name))
                 {
                     commandInfo += GetCommandInfo(command);
                 }
                 commandInfo += "\n```\n";
                 commandInfo += "Список админских команд:\n```\n";
-                foreach (var command in commandManager.GetCommands(PermissionGroup.Admin).OrderBy(s => s.Name))
+                foreach (var command in _commandManager.GetCommands(PermissionGroup.Admin).OrderBy(s => s.Name))
                 {
                     commandInfo += GetCommandInfo(command);
                 }
                 commandInfo += "\n```\n";
 
-                embed = embedService.GetInfoEmbed("Помощь", commandInfo);
+                embed = _embedService.GetInfoEmbed("Помощь", commandInfo);
             }
             else
             {
-                var command = commandManager.GetCommand(commandName);
+                var command = _commandManager.GetCommand(commandName);
 
                 if (command == null)
                 {
-                    embed = embedService.GetErrorEmbed("Ошибка!", $"{Context.User.Mention}, такой команды не существует.");
+                    embed = _embedService.GetErrorEmbed("Ошибка!", $"{Context.User.Mention}, такой команды не существует.");
                 }
                 else
                 {
@@ -88,7 +88,7 @@ namespace DiscordBot.Core.Modules
                         "\n```\n" +
                         GetFormattedArray(command.Aliases) +
                         "\n```\n";
-                    embed = embedService.GetInfoEmbed(command.Name, description);
+                    embed = _embedService.GetInfoEmbed(command.Name, description);
                 }
             }
 
@@ -99,7 +99,7 @@ namespace DiscordBot.Core.Modules
         [CustomAlias("say")]
         public async Task Say([Remainder]string message)
         {
-            var embed = embedService.GetInfoEmbed(message, "");
+            var embed = _embedService.GetInfoEmbed(message, "");
 
             await Context.Message.DeleteAsync();
             await ReplyAsync(message);
@@ -109,24 +109,24 @@ namespace DiscordBot.Core.Modules
         [CustomAlias("ping")]
         public async Task Ping()
         {
-            await ReplyAsync($"{Context.User.Mention}, понг! ({client.Latency}мс)");
+            await ReplyAsync($"{Context.User.Mention}, понг! ({_client.Latency}мс)");
         }
 
         [CustomCommand("8ball")]
         [CustomAlias("8ball")]
         public async Task Ball([Remainder]string question)
         {
-            var responses = commandManager.GetCommand("8ball").Responses;
+            var responses = _commandManager.GetCommand("8ball").Responses;
             Embed embed = null;
 
             if (responses.Count() == 0)
             {
-                embed = embedService.GetErrorEmbed("Ошибка!", "Не найдено ответов.");
+                embed = _embedService.GetErrorEmbed("Ошибка!", "Не найдено ответов.");
             }
             else
             {
-                string response = commandParser.Parse(RandomGenerator.GetRandomFrom(responses), Context);
-                embed = embedService.GetInfoEmbed(":8ball: Предсказание :8ball:", response);
+                string response = _commandParser.Parse(RandomGenerator.GetRandomFrom(responses), Context);
+                embed = _embedService.GetInfoEmbed(":8ball: Предсказание :8ball:", response);
             }
 
             await ReplyAsync(embed: embed);
@@ -141,12 +141,12 @@ namespace DiscordBot.Core.Modules
 
             if (options.Length == 0)
             {
-                embed = embedService.GetErrorEmbed("Ошибка!", "Не найдено вариантов.");
+                embed = _embedService.GetErrorEmbed("Ошибка!", "Не найдено вариантов.");
             }
             else
             {
                 string selection = RandomGenerator.GetRandomFrom(options);
-                embed = embedService.GetInfoEmbed(":eyes: Выбор :eyes:", $"Мой выбор пал на... `{selection}`");
+                embed = _embedService.GetInfoEmbed(":eyes: Выбор :eyes:", $"Мой выбор пал на... `{selection}`");
             }
 
             await ReplyAsync(embed: embed);

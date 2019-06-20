@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace DiscordBot.Storage.Exceptions
+namespace DiscordBot.Storage.Json
 {
     public class JsonStorageException : Exception
     {

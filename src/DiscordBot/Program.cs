@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using DiscordBot.Storage;
+using System.Threading.Tasks;
 
 namespace DiscordBot.Extensions
 {

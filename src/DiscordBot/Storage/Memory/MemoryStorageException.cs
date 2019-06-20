@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace DiscordBot.Storage.Exceptions
+namespace DiscordBot.Storage.Memory
 {
     public class MemoryStorageException : Exception
     {

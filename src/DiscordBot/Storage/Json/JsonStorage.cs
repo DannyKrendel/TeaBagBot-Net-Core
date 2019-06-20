@@ -1,19 +1,17 @@
 ﻿using DiscordBot.Extensions;
-using DiscordBot.Storage.Exceptions;
-using DiscordBot.Storage.Interfaces;
 using Newtonsoft.Json;
 using System;
 using System.IO.Abstractions;
 
-namespace DiscordBot.Storage.Implementations
+namespace DiscordBot.Storage.Json
 {
     public class JsonStorage : IDataStorage
     {
-        private readonly IFileSystem fileSystem;
+        private readonly IFileSystem _fileSystem;
 
         public JsonStorage(IFileSystem fileSystem)
         {
-            this.fileSystem = fileSystem;
+            _fileSystem = fileSystem;
         }
 
         public void StoreObject(object obj, string path)
@@ -22,9 +20,9 @@ namespace DiscordBot.Storage.Implementations
 
             try
             {
-                fileSystem.Directory.CreateDirectory(fileSystem.Path.GetDirectoryName(path));
+                _fileSystem.Directory.CreateDirectory(_fileSystem.Path.GetDirectoryName(path));
                 var json = JsonConvert.SerializeObject(obj, Formatting.Indented);
-                fileSystem.File.WriteAllText(path, json);
+                _fileSystem.File.WriteAllText(path, json);
             }
             catch (Exception ex)
             {
@@ -38,7 +36,7 @@ namespace DiscordBot.Storage.Implementations
 
             try
             {
-                string json = fileSystem.File.ReadAllText(path);
+                string json = _fileSystem.File.ReadAllText(path);
                 return JsonConvert.DeserializeObject<T>(json);
             }
             catch (Exception ex)
@@ -52,7 +50,7 @@ namespace DiscordBot.Storage.Implementations
             if (path is null)
                 throw new ArgumentNullException(nameof(path), "Path was null.");
 
-            if (!fileSystem.Path.IsPathFullyQualified(path))
+            if (!_fileSystem.Path.IsPathFullyQualified(path))
                 throw new ArgumentException($"Invalid path: '{path}'. It must by fully qualified.", nameof(path));
 
             if (!path.EndsWith(".json"))

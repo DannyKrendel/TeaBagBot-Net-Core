@@ -1,4 +1,4 @@
-﻿namespace DiscordBot.Storage.Interfaces
+﻿namespace DiscordBot.Storage
 {
     public interface IDataStorage
     {

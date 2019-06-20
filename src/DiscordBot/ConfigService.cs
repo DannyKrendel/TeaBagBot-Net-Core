@@ -1,23 +1,23 @@
 ﻿using DiscordBot.Core.Entities;
-using DiscordBot.Storage.Interfaces;
+using DiscordBot.Storage;
 using System;
 
 namespace DiscordBot
 {
     public class ConfigService
     {
-        private readonly IDataStorage storage;
+        private readonly IDataStorage _storage;
 
         public ConfigService(IDataStorage storage)
         {
-            this.storage = storage;
+            _storage = storage;
         }
 
         public BotConfig LoadConfig()
         {
             try
             {
-                return storage.RestoreObject<BotConfig>("Config");
+                return _storage.RestoreObject<BotConfig>("Config");
             }
             catch (Exception ex)
             {
@@ -29,7 +29,7 @@ namespace DiscordBot
         {
             try
             {
-                storage.StoreObject(config, "Config");
+                _storage.StoreObject(config, "Config");
             }
             catch (Exception ex)
             {

@@ -1,6 +1,7 @@
 ﻿using DiscordBot.ConsoleUtilities;
 using DiscordBot.Core;
 using DiscordBot.Core.Logging;
+using DiscordBot.Storage;
 using System;
 using System.Threading;
 using System.Threading.Tasks;
@@ -9,19 +10,22 @@ namespace DiscordBot
 {
     public class DiscordBot
     {
-        private readonly DiscordLogger logger;
-        private readonly Connection connection;
-        private readonly CommandHandler commandHandler;
-        private readonly ConsoleHandler consoleHandler;
+        private readonly DiscordLogger _logger;
+        private readonly Connection _connection;
+        private readonly CommandHandler _commandHandler;
+        private readonly ConsoleCommandHandler _consoleHandler;
+        private readonly DiscordMessages _discordMessages;
 
-        private readonly CancellationTokenSource cancelTokenSource;
+        private readonly CancellationTokenSource _cancelTokenSource;
 
-        public DiscordBot(DiscordLogger logger, Connection connection, CommandHandler commandHandler, ConsoleHandler consoleHandler)
+        public DiscordBot(DiscordLogger logger, Connection connection, CommandHandler commandHandler,
+            ConsoleCommandHandler consoleHandler, DiscordMessages discordMessages)
         {
-            this.logger = logger;
-            this.connection = connection;
-            this.commandHandler = commandHandler;
-            this.consoleHandler = consoleHandler;
+            _logger = logger;
+            _connection = connection;
+            _commandHandler = commandHandler;
+            _consoleHandler = consoleHandler;
+            _discordMessages = discordMessages;
         }
 
         public async Task StartAsync()
@@ -36,54 +40,72 @@ namespace DiscordBot
             }
             catch (TokenException ex)
             {
-                await logger.LogErrorAsync("Discord", ex);
+                await _logger.LogErrorAsync("Discord", ex);
             }
 
-            do
+            AttributeUtilities.TryLoadAttributes();
+
+            try
             {
-                exit = restart = false;
-                try
-                {
+                var connect = _connection.ConnectAsync(token);
+                var command = _commandHandler.InitializeAsync();
+                await connect.ContinueWith(async t => await command);
 
-                    AttributeUtilities.TryLoadAttributes();
+                await _consoleHandler.InitializeAsync();
+            }
+            catch (Exception ex)
+            {
+                await _logger.LogErrorAsync("Discord", ex);
+            }
+            finally
+            {
+                Unity.Resolve<DataStorageService>().SaveEverythingToJson();
+                await _connection.DisconnectAsync();
+            }
 
-                    var connect = connection.ConnectAsync(token);
-                    var command = commandHandler.InitializeAsync();
-                    await connect.ContinueWith(async t => await command);
+            //do
+            //{
+            //    exit = restart = false;
+            //    try
+            //    {
 
-                    do
-                    {
-                        var consoleCommand = await consoleHandler.CheckMessagesAsync();
-                        if (!consoleCommand.Item1.HasValue)
-                        {
-                            await logger.LogWarningAsync("Console", "Неверная консольная команда.");
-                        }
-                        else
-                        {
-                            switch (consoleCommand.Item1.Value)
-                            {
-                                case ConsoleCommand.Exit:
-                                    exit = true;
-                                    break;
-                                case ConsoleCommand.Restart:
-                                    restart = true;
-                                    break;
-                                case ConsoleCommand.Say:
-                                    break;
-                            }
-                        }
-                    } while (exit == false && restart == false);
-                }
-                catch (Exception ex)
-                {
-                    await logger.LogErrorAsync("Discord", ex);
-                }
-                finally
-                {
-                    Unity.Resolve<DataStorageService>().SaveEverythingToJson();
-                    await connection.DisconnectAsync();
-                }
-            } while (restart);
+            //        AttributeUtilities.TryLoadAttributes();
+
+            //        var connect = connection.ConnectAsync(token);
+            //        var command = commandHandler.InitializeAsync();
+            //        await connect.ContinueWith(async t => await command);
+
+            //        do
+            //        {
+            //            var consoleCommand = await consoleHandler.InitializeAsync();
+
+            //            switch (consoleCommand.Item1)
+            //            {
+            //                case ConsoleCommand.Exit:
+            //                    exit = true;
+            //                    break;
+            //                case ConsoleCommand.Restart:
+            //                    restart = true;
+            //                    break;
+            //                case ConsoleCommand.Say:
+            //                    await discordMessages.SendMessageAsync(320211476201734144, consoleCommand.Item2);
+            //                    break;
+            //                default:
+            //                    await logger.LogWarningAsync("Console", "Неверная консольная команда.");
+            //                    break;
+            //            }
+            //        } while (exit == false && restart == false);
+            //    }
+            //    catch (Exception ex)
+            //    {
+            //        await logger.LogErrorAsync("Discord", ex);
+            //    }
+            //    finally
+            //    {
+            //        Unity.Resolve<DataStorageService>().SaveEverythingToJson();
+            //        await connection.DisconnectAsync();
+            //    }
+            //} while (restart);
         }
     }
 }

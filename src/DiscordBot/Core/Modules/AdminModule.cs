@@ -8,17 +8,17 @@ namespace DiscordBot.Core.Modules
     [RequirePermissions(PermissionGroup.Admin)]
     public class AdminModule : ModuleBase<SocketCommandContext>
     {
-        private readonly DiscordSocketClient client;
-        private readonly EmbedService embedService;
-        private readonly CommandManager commandManager;
-        private readonly ConfigService configService;
+        private readonly DiscordSocketClient _client;
+        private readonly EmbedService _embedService;
+        private readonly CommandManager _commandManager;
+        private readonly ConfigService _configService;
 
         public AdminModule(DiscordSocketClient client, EmbedService embedService, CommandManager commandManager, ConfigService configService)
         {
-            this.client = client;
-            this.embedService = embedService;
-            this.commandManager = commandManager;
-            this.configService = configService;
+            _client = client;
+            _embedService = embedService;
+            _commandManager = commandManager;
+            _configService = configService;
         }
 
         [CustomCommand("prefix")]
@@ -27,7 +27,7 @@ namespace DiscordBot.Core.Modules
         {
             if (newPrefix == null)
             {
-                await ReplyAsync($"Текущий префикс: `{configService.LoadConfig().Prefix}`");
+                await ReplyAsync($"Текущий префикс: `{_configService.LoadConfig().Prefix}`");
             }
             else if (newPrefix.Length >= 2)
             {
@@ -35,9 +35,9 @@ namespace DiscordBot.Core.Modules
             }
             else
             {
-                var config = configService.LoadConfig();
+                var config = _configService.LoadConfig();
                 config.Prefix = newPrefix;
-                configService.SaveConfig(config);
+                _configService.SaveConfig(config);
 
                 await ReplyAsync($"{Context.User.Mention}, префикс изменён на `{newPrefix}`");
             }

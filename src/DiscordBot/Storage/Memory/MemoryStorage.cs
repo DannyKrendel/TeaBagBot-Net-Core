@@ -1,17 +1,15 @@
-﻿using DiscordBot.Storage.Exceptions;
-using DiscordBot.Storage.Interfaces;
-using System;
+﻿using System;
 using System.Collections.Generic;
 
-namespace DiscordBot.Storage.Implementations
+namespace DiscordBot.Storage.Memory
 {
     public class MemoryStorage : IDataStorage
     {
-        private readonly Dictionary<string, object> dictionary;
+        private readonly Dictionary<string, object> _dictionary;
 
         public MemoryStorage()
         {
-            dictionary = new Dictionary<string, object>();
+            _dictionary = new Dictionary<string, object>();
         }
 
         public void StoreObject(object obj, string key)
@@ -23,10 +21,10 @@ namespace DiscordBot.Storage.Implementations
 
             try
             {
-                if (dictionary.ContainsKey(key)) // if dictionary already contains key
-                    dictionary[key] = obj; // replace old object with new object
+                if (_dictionary.ContainsKey(key)) // if dictionary already contains key
+                    _dictionary[key] = obj; // replace old object with new object
                 else
-                    dictionary.Add(key, obj); // else add object
+                    _dictionary.Add(key, obj); // else add object
             }
             catch (Exception ex)
             {
@@ -40,12 +38,12 @@ namespace DiscordBot.Storage.Implementations
                 throw new ArgumentNullException(nameof(key), $"Key was null.");
             if (key == "")
                 throw new ArgumentException($"Key was empty.", nameof(key));
-            if (!dictionary.ContainsKey(key))
+            if (!_dictionary.ContainsKey(key))
                 throw new ArgumentException($"Object with key '{key}' was not found in storage.", nameof(key));
 
             try
             {
-                return (T)dictionary[key];
+                return (T)_dictionary[key];
             }
             catch (Exception ex)
             {

@@ -1,22 +1,22 @@
-﻿using DiscordBot.Storage.Interfaces;
+﻿using DiscordBot.Storage;
 using System;
 
 namespace DiscordBot
 {
     public class TokenService
     {
-        private readonly IDataStorage storage;
+        private readonly IDataStorage _storage;
 
         public TokenService(IDataStorage storage)
         {
-            this.storage = storage;
+            this._storage = storage;
         }
 
         public string GetToken()
         {
             try
             {
-                return storage.RestoreObject<string>("Token");
+                return _storage.RestoreObject<string>("Token");
             }
             catch (Exception ex)
             {

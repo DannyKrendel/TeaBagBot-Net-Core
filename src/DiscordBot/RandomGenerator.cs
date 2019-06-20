@@ -7,13 +7,13 @@ namespace DiscordBot
 {
     public static class RandomGenerator
     {
-        private static readonly RNGCryptoServiceProvider generator = new RNGCryptoServiceProvider();
+        private static readonly RNGCryptoServiceProvider _generator = new RNGCryptoServiceProvider();
 
         public static int GetRandom(int minimumValue, int maximumValue = int.MaxValue)
         {
             byte[] randomNumber = new byte[1];
 
-            generator.GetBytes(randomNumber);
+            _generator.GetBytes(randomNumber);
 
             double asciiValueOfRandomCharacter = Convert.ToDouble(randomNumber[0]);
 

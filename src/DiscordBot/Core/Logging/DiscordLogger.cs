@@ -8,36 +8,36 @@ namespace DiscordBot.Core.Logging
 {
     public class DiscordLogger
     {
-        private readonly ILogger logger;
-        private readonly EmbedService embedService;
+        private readonly ILogger _logger;
+        private readonly EmbedService _embedService;
 
         public DiscordLogger(ILogger logger, EmbedService embedService)
         {
-            this.logger = logger;
-            this.embedService = embedService;
+            this._logger = logger;
+            this._embedService = embedService;
         }
 
         internal async Task LogAsync(LogMessage logMsg)
         {
-            logger.Log(LogMessageConverter.ToBotLogMessage(logMsg));
+            _logger.Log(LogMessageConverter.ToBotLogMessage(logMsg));
             await Task.CompletedTask;
         }
 
         public async Task LogErrorAsync(string source, Exception exception)
         {
-            logger.Log(new BotLogMessage(BotLogSeverity.Error, source, null, exception));
+            _logger.Log(new BotLogMessage(BotLogSeverity.Error, source, null, exception));
             await Task.CompletedTask;
         }
 
         public async Task LogWarningAsync(string source, string message)
         {
-            logger.Log(new BotLogMessage(BotLogSeverity.Warning, source, message));
+            _logger.Log(new BotLogMessage(BotLogSeverity.Warning, source, message));
             await Task.CompletedTask;
         }
 
         public async Task LogInfoAsync(string source, string message)
         {
-            logger.Log(new BotLogMessage(BotLogSeverity.Info, source, message));
+            _logger.Log(new BotLogMessage(BotLogSeverity.Info, source, message));
             await Task.CompletedTask;
         }
 
@@ -81,7 +81,7 @@ namespace DiscordBot.Core.Logging
                         break;
                 }
 
-                var embed = embedService.GetErrorEmbed("Ошибка!", reason);
+                var embed = _embedService.GetErrorEmbed("Ошибка!", reason);
                 await context.Channel.SendMessageAsync(embed: embed);
                 await LogWarningAsync("Command", log);
             }

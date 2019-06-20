@@ -1,5 +1,4 @@
-﻿using DiscordBot.Storage.Exceptions;
-using DiscordBot.Storage.Implementations;
+﻿using DiscordBot.Storage.Json;
 using System;
 using System.IO.Abstractions.TestingHelpers;
 using Xunit;

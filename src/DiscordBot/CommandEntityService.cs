@@ -1,5 +1,5 @@
 ﻿using DiscordBot.Core.Entities;
-using DiscordBot.Storage.Interfaces;
+using DiscordBot.Storage;
 using System;
 using System.Collections.Generic;
 
@@ -7,18 +7,18 @@ namespace DiscordBot
 {
     public class CommandEntityService
     {
-        private readonly IDataStorage storage;
+        private readonly IDataStorage _storage;
 
         public CommandEntityService(IDataStorage storage)
         {
-            this.storage = storage;
+            this._storage = storage;
         }
 
         public IEnumerable<CommandGroup> LoadCommands()
         {
             try
             {
-                return storage.RestoreObject<IEnumerable<CommandGroup>>("CommandGroups");
+                return _storage.RestoreObject<IEnumerable<CommandGroup>>("CommandGroups");
             }
             catch (Exception ex)
             {
@@ -30,7 +30,7 @@ namespace DiscordBot
         {
             try
             {
-                storage.StoreObject(commandGroups, "CommandGroups");
+                _storage.StoreObject(commandGroups, "CommandGroups");
             }
             catch (Exception ex)
             {

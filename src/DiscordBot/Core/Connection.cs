@@ -8,23 +8,23 @@ namespace DiscordBot.Core
 {
     public class Connection
     {
-        private readonly DiscordLogger logger;
-        private readonly DiscordSocketClient client;
+        private readonly DiscordLogger _logger;
+        private readonly DiscordSocketClient _client;
 
         public Connection(DiscordLogger logger, DiscordSocketClient client)
         {
-            this.logger = logger;
-            this.client = client;
+            this._logger = logger;
+            this._client = client;
         }
 
         public async Task ConnectAsync(string token)
         {
-            client.Log += logger.LogAsync;
+            _client.Log += _logger.LogAsync;
 
             try
             {
-                await client.LoginAsync(TokenType.Bot, token);
-                await client.StartAsync();
+                await _client.LoginAsync(TokenType.Bot, token);
+                await _client.StartAsync();
             }
             catch (Exception ex)
             {
@@ -34,10 +34,10 @@ namespace DiscordBot.Core
 
         public async Task DisconnectAsync()
         {
-            await client.LogoutAsync();
-            await client.StopAsync();
+            await _client.LogoutAsync();
+            await _client.StopAsync();
 
-            client.Log -= logger.LogAsync;
+            _client.Log -= _logger.LogAsync;
         }
     }
 }

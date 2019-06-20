@@ -11,29 +11,29 @@ namespace DiscordBot.Core
 {
     public class CommandHandler
     {
-        private readonly DiscordLogger logger;
-        private readonly DiscordSocketClient client;
-        private readonly CommandService commands;
-        private readonly IServiceProvider services;
+        private readonly DiscordLogger _logger;
+        private readonly DiscordSocketClient _client;
+        private readonly CommandService _commands;
+        private readonly IServiceProvider _services;
 
         public CommandHandler(DiscordLogger logger, DiscordSocketClient client, CommandService commands, IServiceProvider services)
         {
-            this.logger = logger;
-            this.client = client;
-            this.commands = commands;
-            this.services = services;
+            _logger = logger;
+            _client = client;
+            _commands = commands;
+            _services = services;
         }
 
         public async Task InitializeAsync()
         {
-            client.MessageReceived += HandleMessageAsync;
-            commands.CommandExecuted += OnCommandExecutedAsync;
-            await commands.AddModulesAsync(Assembly.GetEntryAssembly(), services);
+            _client.MessageReceived += HandleMessageAsync;
+            _commands.CommandExecuted += OnCommandExecutedAsync;
+            await _commands.AddModulesAsync(Assembly.GetEntryAssembly(), _services);
         }
 
         public async Task OnCommandExecutedAsync(Optional<CommandInfo> command, ICommandContext context, IResult result)
         {
-            await logger.LogCommandResultAsync(command, context, result);
+            await _logger.LogCommandResultAsync(command, context, result);
         }
 
         public async Task HandleMessageAsync(SocketMessage socketMsg)
@@ -45,7 +45,7 @@ namespace DiscordBot.Core
             }
             catch (ConfigException ex)
             {
-                await logger.LogErrorAsync("Command", ex);
+                await _logger.LogErrorAsync("Command", ex);
                 return;
             }
 
@@ -53,11 +53,11 @@ namespace DiscordBot.Core
             int argPos = 0;
 
             if (!msg.HasStringPrefix(config.Prefix, ref argPos) &&
-                !msg.HasMentionPrefix(client.CurrentUser, ref argPos))
+                !msg.HasMentionPrefix(_client.CurrentUser, ref argPos))
                 return;
 
-            var context = new SocketCommandContext(client, msg);
-            await commands.ExecuteAsync(context, argPos, services);
+            var context = new SocketCommandContext(_client, msg);
+            await _commands.ExecuteAsync(context, argPos, _services);
         }
     }
 }
