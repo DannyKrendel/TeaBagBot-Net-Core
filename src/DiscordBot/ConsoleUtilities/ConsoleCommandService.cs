@@ -1,5 +1,5 @@
 ﻿using DiscordBot.ConsoleUtilities.Attributes;
-using DiscordBot.Core.Logging.Entities;
+using DiscordBot.Core.Logging;
 using DiscordBot.Logging;
 using System;
 using System.Collections.Generic;
@@ -17,9 +17,9 @@ namespace DiscordBot.ConsoleUtilities
         public event Func<ConsoleCommandInfo, ConsoleCommandContext, Task> CommandExecuted;
 
         private readonly ConsoleCommands _commandsModule;
-        private readonly ConsoleLogger _logger;
+        private readonly DiscordLogger _logger;
 
-        public ConsoleCommandService(ConsoleLogger logger)
+        public ConsoleCommandService(DiscordLogger logger)
         {
             Commands = new List<ConsoleCommandInfo>();
             _commandsModule = new ConsoleCommands();
@@ -48,7 +48,7 @@ namespace DiscordBot.ConsoleUtilities
 
             if (command == null)
             {
-                _logger.Log(new BotLogMessage(BotLogSeverity.Error, "Command", "Unknown command."));
+                await _logger.LogWarningAsync("Command", "Unknown command.");
                 return;
             }
 

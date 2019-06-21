@@ -13,8 +13,8 @@ namespace DiscordBot.Core.Logging
 
         public DiscordLogger(ILogger logger, EmbedService embedService)
         {
-            this._logger = logger;
-            this._embedService = embedService;
+            _logger = logger;
+            _embedService = embedService;
         }
 
         internal async Task LogAsync(LogMessage logMsg)

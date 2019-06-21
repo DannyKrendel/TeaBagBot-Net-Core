@@ -6,11 +6,11 @@ namespace DiscordBot.ConsoleUtilities
 {
     public class ConsoleCommandHandler
     {
-        private readonly ILogger _logger;
+        private readonly DiscordLogger _logger;
         private readonly ConsoleCommandService _commands;
         private readonly IServiceProvider _services;
 
-        public ConsoleCommandHandler(ILogger logger, ConsoleCommandService commands, IServiceProvider services)
+        public ConsoleCommandHandler(DiscordLogger logger, ConsoleCommandService commands, IServiceProvider services)
         {
             _logger = logger;
             _commands = commands;
