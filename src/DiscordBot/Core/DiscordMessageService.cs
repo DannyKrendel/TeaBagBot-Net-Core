@@ -5,11 +5,11 @@ using System.Threading.Tasks;
 
 namespace DiscordBot.Core
 {
-    public class DiscordMessages
+    public class DiscordMessageService
     {
         private readonly DiscordSocketClient _client;
 
-        public DiscordMessages(DiscordSocketClient client)
+        public DiscordMessageService(DiscordSocketClient client)
         {
             this._client = client;
         }

@@ -11,33 +11,25 @@ namespace DiscordBot.ConsoleUtilities
 {
     public class ConsoleCommandService
     {
-        public List<ConsoleCommandInfo> Commands { get; }
-
         public event Func<string, Task> Log;
-        public event Func<ConsoleCommandInfo, ConsoleCommandContext, Task> CommandExecuted;
 
-        private readonly ConsoleCommands _commandsModule;
-        private readonly DiscordLogger _logger;
+        internal readonly DiscordLogger _logger;
+        private readonly ConsoleCommandBuilder _commandBuilder;
 
-        public ConsoleCommandService(DiscordLogger logger)
+        internal ConsoleCommandService(DiscordLogger logger, ConsoleCommandBuilder commandBuilder)
         {
-            Commands = new List<ConsoleCommandInfo>();
-            _commandsModule = new ConsoleCommands();
             _logger = logger;
+            _commandBuilder = commandBuilder;
         }
 
-        public void AddCommands()
+        public async Task AddModulesAsync(Assembly assembly, IServiceProvider services)
         {
-            foreach (var method in typeof(ConsoleCommands).GetMethods())
-            {
-                var command = BuildCommand(typeof(ConsoleCommands).GetTypeInfo(), method, null);
+            var modules = await ConsoleCommandBuilder.SearchModulesAsync(assembly, this).ConfigureAwait(false);
 
-                if (command != null)
-                    Commands.Add(command);
-            }
+            _commandBuilder.AddCommands(modules);
         }
 
-        public async Task ExecuteAsync(ConsoleCommandContext context, IServiceProvider services)
+        internal async Task ExecuteAsync(ConsoleCommandContext context, IServiceProvider services)
         {
             var splittedMsg = context.Message.Split(new char[] { ' ' });
 
@@ -48,7 +40,7 @@ namespace DiscordBot.ConsoleUtilities
 
             if (command == null)
             {
-                await _logger.LogWarningAsync("Command", "Unknown command.");
+                await _logger.LogWarningAsync("ConsoleCmd", "Unknown command.");
                 return;
             }
 
@@ -57,7 +49,7 @@ namespace DiscordBot.ConsoleUtilities
 
         private ConsoleCommandInfo SearchCommand(string name)
         {
-            foreach (var cmd in Commands)
+            foreach (var cmd in _commandBuilder.Commands)
             {
                 if (cmd.Name == name || cmd.Aliases.Contains(name))
                 {
@@ -65,32 +57,6 @@ namespace DiscordBot.ConsoleUtilities
                 }
             }
             return null;
-        }
-
-        private ConsoleCommandInfo BuildCommand(TypeInfo typeInfo, MethodInfo method, IServiceProvider serviceprovider)
-        {
-            string[] parameters;
-            var attr = method.GetCustomAttributes().FirstOrDefault(
-                a => a.GetType() == typeof(ConsoleCommandAttribute)) as ConsoleCommandAttribute;
-            if (attr != null)
-            {
-                parameters = method.GetParameters().Select(p => p.Name).ToArray();
-            }
-            else
-            {
-                return null;
-            }
-
-            async Task ExecuteCallback(ConsoleCommandContext context, object[] args, IServiceProvider services, ConsoleCommandInfo cmd)
-            {
-                _commandsModule.Context = context;
-
-                var task = method.Invoke(_commandsModule, args) as Task ?? Task.Delay(0);
-
-                await task.ConfigureAwait(false);
-            }
-
-            return new ConsoleCommandInfo(attr.Name, attr.Summary, attr.Aliases, parameters, ExecuteCallback);
         }
     }
 }

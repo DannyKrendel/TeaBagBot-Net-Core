@@ -1,5 +1,6 @@
 ﻿using DiscordBot.Core.Logging;
 using System;
+using System.Reflection;
 using System.Threading.Tasks;
 
 namespace DiscordBot.ConsoleUtilities
@@ -19,7 +20,8 @@ namespace DiscordBot.ConsoleUtilities
 
         public async Task InitializeAsync()
         {
-            _commands.AddCommands();
+            await _commands.AddModulesAsync(Assembly.GetEntryAssembly(), _services);
+
             do
             {
                 string msg = Console.ReadLine();

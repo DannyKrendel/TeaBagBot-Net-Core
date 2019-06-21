@@ -57,10 +57,11 @@ namespace DiscordBot
             _container.RegisterSingleton<CommandHandler>();
             _container.RegisterSingleton<Connection>();
             _container.RegisterSingleton<DiscordBot>();
+            _container.RegisterSingleton<ConsoleCommandBuilder>();
             _container.RegisterSingleton<ConsoleCommandService>();
             _container.RegisterSingleton<ConsoleCommandHandler>();
             _container.RegisterSingleton<CommandParser>();
-            _container.RegisterSingleton<DiscordMessages>();
+            _container.RegisterSingleton<DiscordMessageService>();
 
             _container.AddExtension(new Diagnostic());
         }

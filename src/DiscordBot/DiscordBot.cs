@@ -14,12 +14,12 @@ namespace DiscordBot
         private readonly Connection _connection;
         private readonly CommandHandler _commandHandler;
         private readonly ConsoleCommandHandler _consoleHandler;
-        private readonly DiscordMessages _discordMessages;
+        private readonly DiscordMessageService _discordMessages;
 
         private readonly CancellationTokenSource _cancelTokenSource;
 
         public DiscordBot(DiscordLogger logger, Connection connection, CommandHandler commandHandler,
-            ConsoleCommandHandler consoleHandler, DiscordMessages discordMessages)
+            ConsoleCommandHandler consoleHandler, DiscordMessageService discordMessages)
         {
             _logger = logger;
             _connection = connection;

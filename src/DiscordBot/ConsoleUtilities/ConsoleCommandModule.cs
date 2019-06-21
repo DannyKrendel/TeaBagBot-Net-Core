@@ -4,11 +4,9 @@ using System.Threading.Tasks;
 
 namespace DiscordBot.ConsoleUtilities
 {
-    public class ConsoleCommands
+    public class ConsoleCommandModule : ConsoleModuleBase
     {
-        public ConsoleCommandContext Context { get; set; }
-
-        public ConsoleCommands()
+        public ConsoleCommandModule()
         {
 
         }
