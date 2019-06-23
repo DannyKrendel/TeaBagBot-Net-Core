@@ -1,4 +1,4 @@
-﻿using DiscordBot.ConsoleUtilities;
+﻿using DiscordBot.ConsoleUtils;
 using DiscordBot.Core;
 using DiscordBot.Core.Logging;
 using DiscordBot.Storage;
@@ -14,18 +14,15 @@ namespace DiscordBot
         private readonly Connection _connection;
         private readonly CommandHandler _commandHandler;
         private readonly ConsoleCommandHandler _consoleHandler;
-        private readonly DiscordMessageService _discordMessages;
 
         private readonly CancellationTokenSource _cancelTokenSource;
 
-        public DiscordBot(DiscordLogger logger, Connection connection, CommandHandler commandHandler,
-            ConsoleCommandHandler consoleHandler, DiscordMessageService discordMessages)
+        public DiscordBot(DiscordLogger logger, Connection connection, CommandHandler commandHandler, ConsoleCommandHandler consoleHandler)
         {
             _logger = logger;
             _connection = connection;
             _commandHandler = commandHandler;
             _consoleHandler = consoleHandler;
-            _discordMessages = discordMessages;
         }
 
         public async Task StartAsync()
@@ -43,7 +40,7 @@ namespace DiscordBot
                 await _logger.LogErrorAsync("Discord", ex);
             }
 
-            AttributeUtilities.TryLoadAttributes();
+            AttributeUtils.TryLoadAttributes();
 
             try
             {
@@ -59,8 +56,7 @@ namespace DiscordBot
             }
             finally
             {
-                Unity.Resolve<DataStorageService>().SaveEverythingToJson();
-                await _connection.DisconnectAsync();
+                await ExitAsync();
             }
 
             //do
@@ -106,6 +102,12 @@ namespace DiscordBot
             //        await connection.DisconnectAsync();
             //    }
             //} while (restart);
+        }
+
+        public async Task ExitAsync()
+        {
+            Unity.Resolve<DataStorageService>().SaveEverythingToJson();
+            await _connection.DisconnectAsync();
         }
     }
 }

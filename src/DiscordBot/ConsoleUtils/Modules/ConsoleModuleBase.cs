@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace DiscordBot.ConsoleUtilities
+namespace DiscordBot.ConsoleUtils.Modules
 {
     public abstract class ConsoleModuleBase : ConsoleModuleBase<ConsoleCommandContext> { }
 

@@ -2,18 +2,18 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
-namespace DiscordBot.ConsoleUtilities
+namespace DiscordBot.ConsoleUtils
 {
     public class ConsoleCommandInfo
     {
         public string Name { get; }
         public string Summary { get; }
         public IReadOnlyList<string> Aliases { get; }
-        public IReadOnlyList<string> Parameters { get; }
+        public IReadOnlyList<ConsoleParameterInfo> Parameters { get; }
 
         private readonly Func<ConsoleCommandContext, object[], IServiceProvider, ConsoleCommandInfo, Task> _action;
 
-        public ConsoleCommandInfo(string name, string summary, string[] aliases, string[] parameters,
+        public ConsoleCommandInfo(string name, string summary, string[] aliases, ConsoleParameterInfo[] parameters,
             Func<ConsoleCommandContext, object[], IServiceProvider, ConsoleCommandInfo, Task> action)
         {
             Name = name;
@@ -27,5 +27,7 @@ namespace DiscordBot.ConsoleUtilities
         {
             await _action(context, args, services, this);
         }
+
+        public override string ToString() => Name;
     }
 }

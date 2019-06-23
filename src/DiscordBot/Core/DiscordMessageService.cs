@@ -11,18 +11,27 @@ namespace DiscordBot.Core
 
         public DiscordMessageService(DiscordSocketClient client)
         {
-            this._client = client;
+            _client = client;
         }
 
         public async Task SendMessageAsync(ulong channelId, string message)
         {
-            var channel = _client.GetChannel(channelId) as IMessageChannel;
-            await channel.SendMessageAsync(message);
+            await (_client.GetChannel(channelId) as IMessageChannel).SendMessageAsync(message);
         }
 
         public async Task SendMessageAsync(string channelName, string message)
         {
-            throw new NotImplementedException();
+            foreach (var guild in _client.Guilds)
+            {
+                foreach (var channel in guild.Channels)
+                {
+                    if (channel.Name == channelName)
+                    {
+                        await (channel as IMessageChannel).SendMessageAsync(message);
+                        return;
+                    }
+                }
+            }
         }
     }
 }

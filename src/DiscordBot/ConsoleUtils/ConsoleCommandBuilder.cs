@@ -1,20 +1,19 @@
-﻿using DiscordBot.ConsoleUtilities.Attributes;
+﻿using DiscordBot.ConsoleUtils.Attributes;
+using DiscordBot.ConsoleUtils.Modules;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
 
-namespace DiscordBot.ConsoleUtilities
+namespace DiscordBot.ConsoleUtils
 {
     internal class ConsoleCommandBuilder
     {
-        private readonly ConsoleCommandModule _commandsModule;
         public IReadOnlyList<ConsoleCommandInfo> Commands { get; private set; }
 
         public ConsoleCommandBuilder()
         {
-            _commandsModule = new ConsoleCommandModule();
         }
 
         public static async Task<IReadOnlyList<TypeInfo>> SearchModulesAsync(Assembly assembly, ConsoleCommandService service)
@@ -51,7 +50,7 @@ namespace DiscordBot.ConsoleUtilities
                    !typeInfo.ContainsGenericParameters;
         }
 
-        public void AddCommands(IReadOnlyList<TypeInfo> modules)
+        public void AddCommands(IReadOnlyList<TypeInfo> modules, ConsoleCommandService service, IServiceProvider serviceProvider)
         {
             var commands = new List<ConsoleCommandInfo>();
 
@@ -59,7 +58,7 @@ namespace DiscordBot.ConsoleUtilities
             {
                 foreach (var method in module.GetMethods())
                 {
-                    var command = BuildCommand(typeof(ConsoleCommandModule).GetTypeInfo(), method, null);
+                    var command = BuildCommand(typeof(ConsoleModule).GetTypeInfo(), method, service, serviceProvider);
 
                     if (command != null)
                         commands.Add(command);
@@ -69,25 +68,27 @@ namespace DiscordBot.ConsoleUtilities
             Commands = commands.AsReadOnly();
         }
 
-        private ConsoleCommandInfo BuildCommand(TypeInfo typeInfo, MethodInfo method, IServiceProvider serviceprovider)
+        private ConsoleCommandInfo BuildCommand(TypeInfo typeInfo, MethodInfo method, ConsoleCommandService service, IServiceProvider services)
         {
-            string[] parameters;
             var attr = method.GetCustomAttributes().FirstOrDefault(
                 a => a.GetType() == typeof(ConsoleCommandAttribute)) as ConsoleCommandAttribute;
-            if (attr != null)
-            {
-                parameters = method.GetParameters().Select(p => p.Name).ToArray();
-            }
-            else
+
+            if (attr == null)
             {
                 return null;
             }
 
-            async Task ExecuteCallback(ConsoleCommandContext context, object[] args, IServiceProvider services, ConsoleCommandInfo cmd)
-            {
-                _commandsModule.Context = context;
+            var parameters = method.GetParameters().Select(p => new ConsoleParameterInfo(p.Name, p.ParameterType)).ToArray();
 
-                var task = method.Invoke(_commandsModule, args) as Task ?? Task.Delay(0);
+            var createInstance = ReflectionUtils.CreateBuilder<ConsoleModuleBase>(typeInfo, service);
+
+            async Task ExecuteCallback(ConsoleCommandContext context, object[] args, IServiceProvider serviceProvider, ConsoleCommandInfo cmd)
+            {
+                var module = createInstance(services);
+
+                module.Context = context;
+
+                var task = method.Invoke(module, args) as Task ?? Task.Delay(0);
 
                 await task.ConfigureAwait(false);
             }

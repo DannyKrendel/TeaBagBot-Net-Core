@@ -1,6 +1,6 @@
 ﻿using Discord.Commands;
 using Discord.WebSocket;
-using DiscordBot.ConsoleUtilities;
+using DiscordBot.ConsoleUtils;
 using DiscordBot.Core;
 using DiscordBot.Core.Entities;
 using DiscordBot.Core.Factories;
@@ -49,6 +49,7 @@ namespace DiscordBot
             _container.RegisterSingleton<DiscordSocketClient>(new InjectionConstructor(typeof(DiscordSocketConfig)));
             _container.RegisterSingleton<CommandService>(new InjectionConstructor(typeof(CommandServiceConfig)));
 
+            _container.RegisterSingleton<DiscordBot>();
             _container.RegisterSingleton<CoreServiceInitializer>();
             _container.RegisterSingleton<EmbedService>();
             _container.RegisterFactory<IServiceProvider>(x => _container.Resolve<CoreServiceInitializer>().BuildServices());
@@ -56,7 +57,6 @@ namespace DiscordBot
             _container.RegisterSingleton<CommandEntityService>();
             _container.RegisterSingleton<CommandHandler>();
             _container.RegisterSingleton<Connection>();
-            _container.RegisterSingleton<DiscordBot>();
             _container.RegisterSingleton<ConsoleCommandBuilder>();
             _container.RegisterSingleton<ConsoleCommandService>();
             _container.RegisterSingleton<ConsoleCommandHandler>();

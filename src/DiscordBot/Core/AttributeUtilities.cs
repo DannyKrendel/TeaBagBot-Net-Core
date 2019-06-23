@@ -5,7 +5,7 @@ using System.Reflection;
 
 namespace DiscordBot.Core
 {
-    public static class AttributeUtilities
+    public static class AttributeUtils
     {
         public static void TryLoadAttributes()
         {

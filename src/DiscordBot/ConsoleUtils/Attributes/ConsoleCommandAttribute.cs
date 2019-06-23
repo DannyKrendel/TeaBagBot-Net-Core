@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace DiscordBot.ConsoleUtilities.Attributes
+namespace DiscordBot.ConsoleUtils.Attributes
 {
     [AttributeUsage(AttributeTargets.Method, AllowMultiple = false, Inherited = true)]
     public class ConsoleCommandAttribute : Attribute

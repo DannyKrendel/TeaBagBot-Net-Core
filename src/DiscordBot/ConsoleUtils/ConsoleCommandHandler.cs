@@ -3,7 +3,7 @@ using System;
 using System.Reflection;
 using System.Threading.Tasks;
 
-namespace DiscordBot.ConsoleUtilities
+namespace DiscordBot.ConsoleUtils
 {
     public class ConsoleCommandHandler
     {
@@ -31,7 +31,7 @@ namespace DiscordBot.ConsoleUtilities
 
         public async Task HandleMessageAsync(string msg)
         {
-            var context = new ConsoleCommandContext(msg, this);
+            var context = new ConsoleCommandContext(msg);
             await _commands.ExecuteAsync(context, _services);
         }
     }
