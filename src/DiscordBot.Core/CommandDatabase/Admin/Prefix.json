@@ -1,0 +1,9 @@
+{
+  "Name": "prefix",
+  "Description": "Позволяет менять перфикс бота.\nПример: prefix <новый префикс>",
+  "Aliases": [
+    "префикс"
+  ],
+  "Args": null,
+  "Responses": null
+}
