@@ -1,4 +1,4 @@
-﻿using DiscordBot.Storage.Json;
+﻿using TeaBagBot.Core.Storage.Json;
 using System;
 using System.IO.Abstractions.TestingHelpers;
 using Xunit;

@@ -1,5 +1,5 @@
-﻿using DiscordBot.Storage;
-using DiscordBot.Storage.Memory;
+﻿using TeaBagBot.Core.Storage;
+using TeaBagBot.Core.Storage.Memory;
 using System;
 using Xunit;
 

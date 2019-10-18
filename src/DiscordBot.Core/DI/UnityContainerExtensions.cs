@@ -3,7 +3,6 @@ using Discord.WebSocket;
 using TeaBagBot.Core.Commands;
 using TeaBagBot.Core.Entities;
 using TeaBagBot.Core.Factories;
-using TeaBagBot.Core.Helpers;
 using TeaBagBot.Core.Logging;
 using TeaBagBot.Core.Storage;
 using TeaBagBot.Core.Storage.Json;
@@ -12,8 +11,9 @@ using System;
 using System.IO.Abstractions;
 using Unity;
 using Unity.Injection;
+using TeaBagBot.Core.Messages;
 
-namespace TeaBagBot.Core.Extensions
+namespace TeaBagBot.Core.DI
 {
     public static class UnityContainerExtensions
     {
@@ -30,22 +30,25 @@ namespace TeaBagBot.Core.Extensions
             container.RegisterSingleton<DataStorageService>();
             container.RegisterSingleton<DiscordLogger>();
             container.RegisterSingleton<ConfigService>();
-            container.RegisterFactory<BotConfig>(x => container.Resolve<ConfigService>().LoadConfig());
+            container.RegisterFactory<TeaBagConfig>(x => container.Resolve<ConfigService>().LoadConfig());
             container.RegisterFactory<DiscordSocketConfig>(x => SocketConfigFactory.GetDefault());
             container.RegisterFactory<CommandServiceConfig>(x => CommandServiceConfigFactory.GetDefault());
             container.RegisterSingleton<DiscordSocketClient>(new InjectionConstructor(typeof(DiscordSocketConfig)));
             container.RegisterSingleton<CommandService>(new InjectionConstructor(typeof(CommandServiceConfig)));
 
             container.RegisterSingleton<IBot, TeaBagBot>();
-            container.RegisterSingleton<ServiceInitializer>();
+            container.RegisterSingleton<ServiceBuilder>();
             container.RegisterSingleton<EmbedService>();
-            container.RegisterFactory<IServiceProvider>(x => container.Resolve<ServiceInitializer>().BuildServices());
-            container.RegisterSingleton<CommandManager>();
-            container.RegisterSingleton<CommandEntityService>();
+            container.RegisterFactory<IServiceProvider>(x => container.Resolve<ServiceBuilder>().BuildServices());
+            container.RegisterSingleton<TeaBagCommandProvider>();
+            container.RegisterSingleton<TeaBagCommandService>();
             container.RegisterSingleton<Connection>();
             container.RegisterSingleton<ICommandHandler<SocketMessage>, CommandHandler>();
-            container.RegisterSingleton<CommandParser>();
+            container.RegisterSingleton<ResponseParser>();
             container.RegisterSingleton<DiscordMessageService>();
+            container.RegisterSingleton<ResponseService>();
+            container.RegisterSingleton<ResponseProvider>();
+            container.RegisterSingleton<IMessageHandler<SocketMessage>, MessageHandler>();
         }
     }
 }

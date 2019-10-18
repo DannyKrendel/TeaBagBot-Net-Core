@@ -1,6 +1,6 @@
 ﻿namespace TeaBagBot.Core.Entities
 {
-    public class BotConfig
+    public class TeaBagConfig
     {
         public string Prefix { get; set; }
         public ulong DefaultChannelId { get; set; } 

@@ -1,4 +1,5 @@
-﻿using DiscordBot.Core;
+﻿using TeaBagBot.Core;
+using TeaBagBot.ConsoleApp;
 using System.Threading.Tasks;
 using Xunit;
 
@@ -11,7 +12,7 @@ namespace TeaBagBot.Tests.Unit
         [InlineData("FakeToken")]
         public async Task ConnectAsync_ShouldThrowConnectionException_IfInvalidToken(string token)
         {
-            var connection = Unity.Resolve<Connection>();
+            var connection = UnityDI.Resolve<Connection>();
 
             var exception = await Record.ExceptionAsync(async () => await connection.ConnectAsync(token));
 

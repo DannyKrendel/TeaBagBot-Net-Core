@@ -15,6 +15,7 @@ namespace TeaBagBot.Core.Storage
         private readonly string _tokenPath = @"C:\Users\Danny\Source\Repos\TeaBagBot\Config\Token";
         private readonly string _configPath = @"C:\Users\Danny\Source\Repos\TeaBagBot\Config\Config";
         private readonly string _commandsPath = @"C:\Users\Danny\Source\Repos\TeaBagBot\CommandDatabase";
+        private readonly string _responsesPath = @"C:\Users\Danny\Source\Repos\TeaBagBot\Responses";
 
         public DataStorageService(JsonStorage jsonStorage, MemoryStorage memoryStorage)
         {
@@ -27,10 +28,10 @@ namespace TeaBagBot.Core.Storage
             var token = _jsonStorage.RestoreObject<string>(_tokenPath);
             _memoryStorage.StoreObject(token, "Token");
 
-            var config = _jsonStorage.RestoreObject<BotConfig>(_configPath);
+            var config = _jsonStorage.RestoreObject<TeaBagConfig>(_configPath);
             _memoryStorage.StoreObject(config, "Config");
 
-            var commandGroups = new List<CommandGroup>();
+            var commandGroups = new List<TeaBagCommandGroup>();
             var groupNames = Enum.GetNames(typeof(PermissionGroup));
 
             foreach (var groupName in groupNames)
@@ -44,35 +45,55 @@ namespace TeaBagBot.Core.Storage
 
                 var paths = Directory.GetFiles(groupPath);
 
-                var commands = new List<CommandData>();
+                var commands = new List<TeaBagCommand>();
 
                 foreach (var path in paths)
                 {
-                    var command = _jsonStorage.RestoreObject<CommandData>(path);
+                    var command = _jsonStorage.RestoreObject<TeaBagCommand>(path);
                     commands.Add(command);
                 }
 
                 PermissionGroup group = (PermissionGroup)Enum.Parse(typeof(PermissionGroup), groupName);
-                commandGroups.Add(new CommandGroup(group, commands));
+                commandGroups.Add(new TeaBagCommandGroup(group, commands));
             }
 
             _memoryStorage.StoreObject(commandGroups, "CommandGroups");
+
+            var rPaths = Directory.GetFiles(_responsesPath);
+
+            var responses = new List<TeaBagResponse>();
+
+            foreach (var path in rPaths)
+            {
+                var response = _jsonStorage.RestoreObject<TeaBagResponse>(path);
+                responses.Add(response);
+            }
+
+            _memoryStorage.StoreObject(responses, "Responses");
         }
 
         public void SaveEverythingToJson()
         {
-            var config = _memoryStorage.RestoreObject<BotConfig>("Config");
+            var config = _memoryStorage.RestoreObject<TeaBagConfig>("Config");
             _jsonStorage.StoreObject(config, _configPath);
 
-            var commandGroups = _memoryStorage.RestoreObject<IEnumerable<CommandGroup>>("CommandGroups");
+            var commandGroups = _memoryStorage.RestoreObject<IEnumerable<TeaBagCommandGroup>>("CommandGroups");
 
             foreach (var commandGroup in commandGroups)
             {
-                var groupPath = Path.Combine(_commandsPath, commandGroup.Group.ToString());
+                var path = Path.Combine(_commandsPath, commandGroup.Group.ToString());
                 foreach (var command in commandGroup.Commands)
                 {
-                    _jsonStorage.StoreObject(command, Path.Combine(groupPath, command.Name + ".json"));
+                    _jsonStorage.StoreObject(command, Path.Combine(path, command.Name + ".json"));
                 }
+            }
+
+            var responses = _memoryStorage.RestoreObject<IEnumerable<TeaBagResponse>>("Responses");
+
+            foreach (var response in responses)
+            {
+                var path = Path.Combine(_responsesPath, response.Name);
+                _jsonStorage.StoreObject(responses, path);
             }
         }
     }

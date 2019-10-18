@@ -1,5 +1,5 @@
-﻿using DiscordBot.Core.Logging.Entities;
-using DiscordBot.Logging;
+﻿using TeaBagBot.ConsoleApp.Logging;
+using TeaBagBot.Core.Logging.Entities;
 using Xunit;
 
 namespace TeaBagBot.Tests.Unit

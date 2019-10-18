@@ -3,7 +3,5 @@
   "Description": "Только пинг, ничего лишнего.",
   "Aliases": [
     "пинг"
-  ],
-  "Args": null,
-  "Responses": null
+  ]
 }

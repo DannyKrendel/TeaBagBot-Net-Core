@@ -1,4 +1,4 @@
-﻿using DiscordBot.Core.Factories;
+﻿using TeaBagBot.Core.Factories;
 using Xunit;
 
 namespace TeaBagBot.Tests.Unit

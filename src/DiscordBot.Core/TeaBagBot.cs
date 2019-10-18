@@ -5,6 +5,7 @@ using TeaBagBot.Core.Storage;
 using System;
 using System.Threading;
 using System.Threading.Tasks;
+using TeaBagBot.Core.Messages;
 
 namespace TeaBagBot.Core
 {
@@ -13,19 +14,21 @@ namespace TeaBagBot.Core
         private readonly DiscordLogger _logger;
         private readonly Connection _connection;
         private readonly ICommandHandler<SocketMessage> _commandHandler;
+        private readonly IMessageHandler<SocketMessage> _messageHandler;
         private readonly TokenService _tokenService;
         private readonly DataStorageService _dataStorageService;
 
         private CancellationTokenSource _cancelTokenSource;
 
-        public TeaBagBot(DiscordLogger logger, Connection connection, 
-            ICommandHandler<SocketMessage> commandHandler, TokenService tokenService, DataStorageService dataStorageService)
+        public TeaBagBot(DiscordLogger logger, Connection connection, TokenService tokenService, DataStorageService dataStorageService,
+            ICommandHandler<SocketMessage> commandHandler, IMessageHandler<SocketMessage> messageHandler)
         {
             _logger = logger;
             _connection = connection;
-            _commandHandler = commandHandler;
             _tokenService = tokenService;
             _dataStorageService = dataStorageService;
+            _commandHandler = commandHandler;
+            _messageHandler = messageHandler;
         }
 
         public async Task StartAsync()
@@ -37,6 +40,7 @@ namespace TeaBagBot.Core
                 string token = _tokenService.GetToken();
                 await _connection.ConnectAsync(token);
                 await _commandHandler.InitializeAsync();
+                await _messageHandler.InitializeAsync();
             }
             catch (TokenException ex)
             {

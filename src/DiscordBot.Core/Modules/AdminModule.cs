@@ -11,10 +11,10 @@ namespace TeaBagBot.Core.Modules
     {
         private readonly DiscordSocketClient _client;
         private readonly EmbedService _embedService;
-        private readonly CommandManager _commandManager;
+        private readonly TeaBagCommandProvider _commandManager;
         private readonly ConfigService _configService;
 
-        public AdminModule(DiscordSocketClient client, EmbedService embedService, CommandManager commandManager, ConfigService configService)
+        public AdminModule(DiscordSocketClient client, EmbedService embedService, TeaBagCommandProvider commandManager, ConfigService configService)
         {
             _client = client;
             _embedService = embedService;

@@ -19,6 +19,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\DiscordBot.Core\TeaBagBot.Core.csproj" />
+    <ProjectReference Include="..\TeaBagBot.ConsoleApp\TeaBagBot.ConsoleApp.csproj" />
   </ItemGroup>
 
 </Project>

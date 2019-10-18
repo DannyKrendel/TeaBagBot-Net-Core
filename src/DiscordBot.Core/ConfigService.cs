@@ -13,11 +13,11 @@ namespace TeaBagBot.Core
             _storage = storage;
         }
 
-        public BotConfig LoadConfig()
+        public TeaBagConfig LoadConfig()
         {
             try
             {
-                return _storage.RestoreObject<BotConfig>("Config");
+                return _storage.RestoreObject<TeaBagConfig>("Config");
             }
             catch (Exception ex)
             {
@@ -25,7 +25,7 @@ namespace TeaBagBot.Core
             }
         }
 
-        public void SaveConfig(BotConfig config)
+        public void SaveConfig(TeaBagConfig config)
         {
             try
             {

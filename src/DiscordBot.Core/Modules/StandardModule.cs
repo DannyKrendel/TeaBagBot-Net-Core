@@ -8,6 +8,7 @@ using System;
 using System.Linq;
 using System.Threading.Tasks;
 using TeaBagBot.Core.Helpers;
+using TeaBagBot.Core.Messages;
 
 namespace TeaBagBot.Core.Modules
 {
@@ -16,25 +17,27 @@ namespace TeaBagBot.Core.Modules
     {
         private readonly DiscordSocketClient _client;
         private readonly EmbedService _embedService;
-        private readonly CommandManager _commandManager;
+        private readonly TeaBagCommandProvider _commandManager;
         private readonly ConfigService _configService;
-        private readonly CommandParser _commandParser;
+        private readonly ResponseParser _responseParser;
+        private readonly ResponseProvider _responseProvider;
 
-        public StandardModule(DiscordSocketClient client, EmbedService embedService, CommandManager commandManager, ConfigService configService, CommandParser commandParser)
+        public StandardModule(DiscordSocketClient client, EmbedService embedService, TeaBagCommandProvider commandManager, 
+            ConfigService configService, ResponseParser responseParser, ResponseProvider responseProvider)
         {
             _client = client;
             _embedService = embedService;
             _commandManager = commandManager;
             _configService = configService;
-            _commandParser = commandParser;
+            _responseParser = responseParser;
+            _responseProvider = responseProvider;
         }
 
         [Command("help")]
         [Alias("помощь", "помоги", "хелп")]
-        [Summary("Эта команда поможет вам разобраться с ботом.\nНапишите `help <название команды>`, чтобы узнать как пользоваться любой командой.")]
-        public async Task Help(string commandName = null)
+        public async Task Help([Remainder]string commandName = null)
         {
-            string GetCommandInfo(CommandData command)
+            string GetCommandInfo(TeaBagCommand command)
             {
                 return $"{command.Name}\n";
             }
@@ -100,7 +103,6 @@ namespace TeaBagBot.Core.Modules
 
         [Command("say")]
         [Alias("echo", "скажи", "повтори")]
-        [Summary("Эта команда заставит бота повторить всё, что вы напишете (почти анонимно).\nПример: say Сегодня хороший день")]
         public async Task Say([Remainder]string message)
         {
             var embed = _embedService.GetInfoEmbed(message, "");
@@ -111,7 +113,6 @@ namespace TeaBagBot.Core.Modules
 
         [Command("ping")]
         [Alias("пинг")]
-        [Summary("Только пинг, ничего лишнего.")]
         public async Task Ping()
         {
             await ReplyAsync($"{Context.User.Mention}, понг! ({_client.Latency}мс)");
@@ -119,20 +120,19 @@ namespace TeaBagBot.Core.Modules
 
         [Command("8ball")]
         [Alias("шар", "предсказание")]
-        [Summary("Эта команда позволяет вам заглянуть в будущее и получить ответ почти на любой вопрос.\nПример: 8ball пойти ли мне погулять?")]
         public async Task Ball([Remainder]string question)
         {
-            var responses = _commandManager.GetCommand("8ball").Responses;
+            string rawResponse = _responseProvider.GetRandomResponseByName("8ball");
             Embed embed = null;
 
-            if (responses.Count() == 0)
+            if (rawResponse != null)
             {
-                embed = _embedService.GetErrorEmbed("Ошибка!", "Не найдено ответов.");
+                string response = _responseParser.Parse(rawResponse, new TeaBagMessageContext(Context.Message));
+                embed = _embedService.GetInfoEmbed(":8ball: Предсказание :8ball:", response);
             }
             else
             {
-                string response = _commandParser.Parse(RandomUtils.GetRandomFrom(responses), Context);
-                embed = _embedService.GetInfoEmbed(":8ball: Предсказание :8ball:", response);
+                embed = _embedService.GetErrorEmbed("Ошибка!", "Не найдено ответов.");
             }
 
             await ReplyAsync(embed: embed);
@@ -140,7 +140,6 @@ namespace TeaBagBot.Core.Modules
 
         [Command("pick")]
         [Alias("выбор", "выбери")]
-        [Summary("Делает выбор за вас. Разделяйте варианты вертикальной чертой.\nПример: pick красный|зелёный|синий")]
         public async Task Pick([Remainder]string message)
         {
             string[] options = message.Split(new char[] { '|' }, StringSplitOptions.RemoveEmptyEntries);

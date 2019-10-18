@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Threading.Tasks;
-using TeaBagBot.ConsoleApp.DI;
 using TeaBagBot.Core;
 using TeaBagBot.Core.Storage;
 

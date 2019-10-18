@@ -6,9 +6,9 @@ using Unity.Injection;
 using TeaBagBot.Core.Helpers;
 using TeaBagBot.ConsoleApp.Logging;
 using TeaBagBot.Core.Commands;
-using TeaBagBot.Core.Extensions;
+using TeaBagBot.Core.DI;
 
-namespace TeaBagBot.ConsoleApp.DI
+namespace TeaBagBot.ConsoleApp
 {
     public static class UnityDI
     {
