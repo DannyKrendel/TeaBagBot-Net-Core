@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace DiscordBot.Commands
+namespace TeaBagBot.Core.Commands
 {
     public class CommandException : Exception
     {

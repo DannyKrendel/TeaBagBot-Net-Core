@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace DiscordBot.Storage.Memory
+namespace TeaBagBot.Core.Storage.Memory
 {
     public class MemoryStorageException : Exception
     {

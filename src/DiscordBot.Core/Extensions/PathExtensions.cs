@@ -1,7 +1,7 @@
 ﻿using System.IO;
 using System.IO.Abstractions;
 
-namespace DiscordBot.Extensions
+namespace TeaBagBot.Core.Extensions
 {
     public static class PathExtensions
     {

@@ -1,9 +1,9 @@
-﻿using DiscordBot.Extensions;
+﻿using TeaBagBot.Core.Extensions;
 using Newtonsoft.Json;
 using System;
 using System.IO.Abstractions;
 
-namespace DiscordBot.Storage.Json
+namespace TeaBagBot.Core.Storage.Json
 {
     public class JsonStorage : IDataStorage
     {

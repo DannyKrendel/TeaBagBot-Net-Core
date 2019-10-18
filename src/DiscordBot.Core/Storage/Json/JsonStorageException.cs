@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace DiscordBot.Storage.Json
+namespace TeaBagBot.Core.Storage.Json
 {
     public class JsonStorageException : Exception
     {

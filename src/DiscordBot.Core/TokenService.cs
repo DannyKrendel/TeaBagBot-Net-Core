@@ -1,7 +1,7 @@
-﻿using DiscordBot.Storage;
+﻿using TeaBagBot.Core.Storage;
 using System;
 
-namespace DiscordBot
+namespace TeaBagBot.Core
 {
     public class TokenService
     {
@@ -9,7 +9,7 @@ namespace DiscordBot
 
         public TokenService(IDataStorage storage)
         {
-            this._storage = storage;
+            _storage = storage;
         }
 
         public string GetToken()

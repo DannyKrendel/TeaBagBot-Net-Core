@@ -1,21 +1,20 @@
-﻿using DiscordBot.Core;
-using DiscordBot.Core.Entities;
-using DiscordBot.Storage.Json;
-using DiscordBot.Storage.Memory;
+﻿using TeaBagBot.Core.Entities;
+using TeaBagBot.Core.Storage.Json;
+using TeaBagBot.Core.Storage.Memory;
 using System;
 using System.Collections.Generic;
 using System.IO;
 
-namespace DiscordBot.Storage
+namespace TeaBagBot.Core.Storage
 {
     public class DataStorageService
     {
         private readonly JsonStorage _jsonStorage;
         private readonly MemoryStorage _memoryStorage;
 
-        private readonly string _tokenPath = @"C:\Users\Danny\Source\Repos\DiscordBot\src\DiscordBot\Config\Token";
-        private readonly string _configPath = @"C:\Users\Danny\Source\Repos\DiscordBot\src\DiscordBot\Config\Config";
-        private readonly string _commandsPath = @"C:\Users\Danny\Source\Repos\DiscordBot\src\DiscordBot\CommandDatabase";
+        private readonly string _tokenPath = @"C:\Users\Danny\Source\Repos\TeaBagBot\Config\Token";
+        private readonly string _configPath = @"C:\Users\Danny\Source\Repos\TeaBagBot\Config\Config";
+        private readonly string _commandsPath = @"C:\Users\Danny\Source\Repos\TeaBagBot\CommandDatabase";
 
         public DataStorageService(JsonStorage jsonStorage, MemoryStorage memoryStorage)
         {

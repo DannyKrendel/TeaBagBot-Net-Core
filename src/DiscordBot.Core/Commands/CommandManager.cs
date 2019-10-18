@@ -1,9 +1,8 @@
-﻿using DiscordBot.Core;
-using DiscordBot.Core.Entities;
+﻿using TeaBagBot.Core.Entities;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace DiscordBot.Commands
+namespace TeaBagBot.Core.Commands
 {
     public class CommandManager
     {

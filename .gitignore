@@ -342,7 +342,7 @@ ASALocalRun/
 healthchecksdb
 
 # Bot Config
-src/DiscordBot/Config/
+Config/
 
 # Bot Commands
-src/DiscordBot/Commands/
+Commands/

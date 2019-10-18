@@ -1,4 +1,4 @@
-﻿namespace DiscordBot.Storage
+﻿namespace TeaBagBot.Core.Storage
 {
     public interface IDataStorage
     {

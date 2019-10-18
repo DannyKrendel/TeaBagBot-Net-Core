@@ -1,8 +1,8 @@
-﻿using DiscordBot.Core.Entities;
-using DiscordBot.Storage;
+﻿using TeaBagBot.Core.Entities;
+using TeaBagBot.Core.Storage;
 using System;
 
-namespace DiscordBot
+namespace TeaBagBot.Core
 {
     public class ConfigService
     {

@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace DiscordBot
+namespace TeaBagBot.Core
 {
     public class TokenException : Exception
     {

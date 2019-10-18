@@ -1,10 +1,13 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <OutputType>Exe</OutputType>
+    <OutputType>Library</OutputType>
     <TargetFramework>netcoreapp2.2</TargetFramework>
     <LangVersion>7.3</LangVersion>
     <DebugType>full</DebugType>
+    <ApplicationIcon />
+    <StartupObject />
+    <Win32Resource />
   </PropertyGroup>
 
   <ItemGroup>

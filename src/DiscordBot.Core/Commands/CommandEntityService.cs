@@ -1,9 +1,9 @@
-﻿using DiscordBot.Core.Entities;
-using DiscordBot.Storage;
+﻿using TeaBagBot.Core.Entities;
+using TeaBagBot.Core.Storage;
 using System;
 using System.Collections.Generic;
 
-namespace DiscordBot.Commands
+namespace TeaBagBot.Core.Commands
 {
     public class CommandEntityService
     {
@@ -11,7 +11,7 @@ namespace DiscordBot.Commands
 
         public CommandEntityService(IDataStorage storage)
         {
-            this._storage = storage;
+            _storage = storage;
         }
 
         public IEnumerable<CommandGroup> LoadCommands()

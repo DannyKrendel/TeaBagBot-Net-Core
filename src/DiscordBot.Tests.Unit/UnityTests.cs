@@ -1,10 +1,4 @@
-﻿using Discord.Commands;
-using Discord.WebSocket;
-using DiscordBot.Commands;
-using DiscordBot.Core;
-using DiscordBot.Core.Logging;
-using DiscordBot.Storage;
-using System.IO.Abstractions;
+﻿using TeaBagBot.Core;
 using Xunit;
 
 namespace TeaBagBot.Tests.Unit

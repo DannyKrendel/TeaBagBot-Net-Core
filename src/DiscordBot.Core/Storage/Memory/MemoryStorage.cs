@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace DiscordBot.Storage.Memory
+namespace TeaBagBot.Core.Storage.Memory
 {
     public class MemoryStorage : IDataStorage
     {

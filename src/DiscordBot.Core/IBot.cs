@@ -1,6 +1,6 @@
 ﻿using System.Threading.Tasks;
 
-namespace DiscordBot
+namespace TeaBagBot.Core
 {
     public interface IBot
     {
