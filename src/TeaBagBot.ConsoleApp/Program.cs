@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Threading.Tasks;
 using TeaBagBot.Core;
+using TeaBagBot.Core.Commands;
 using TeaBagBot.Core.Storage;
 
 namespace TeaBagBot.ConsoleApp
@@ -12,6 +13,7 @@ namespace TeaBagBot.ConsoleApp
             UnityDI.Resolve<DataStorageService>().LoadEverythingToMemory();
             var bot = UnityDI.Resolve<IBot>();
             await bot.StartAsync();
+            await UnityDI.Resolve<ICommandHandler<string>>().InitializeAsync();
         }
     }
 }

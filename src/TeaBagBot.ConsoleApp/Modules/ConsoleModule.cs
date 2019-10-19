@@ -23,28 +23,39 @@ namespace TeaBagBot.ConsoleApp.Modules
         }
 
         [ConsoleCommand("say")]
-        public async Task Say(string channelName, string message)
+        [ConsoleAlias("echo")]
+        public async Task Say(string message, string channel = null)
         {
-            await _messageService.SendMessageAsync(channelName, message);
-        }
-
-        [ConsoleCommand("say")]
-        public async Task Say(string message)
-        {
-            var channelId = _configService.LoadConfig().DefaultChannelId;
-            await _messageService.SendMessageAsync(channelId, message);
+            if (channel == null)
+            {
+                var channelId = _configService.LoadConfig().DefaultChannelId;
+                await _messageService.SendMessageAsync(channelId, message);
+            }
+            else
+            {
+                if (ulong.TryParse(channel, out ulong channelId))
+                {
+                    await _messageService.SendMessageAsync(channelId, message);
+                }
+                else
+                {
+                    await _messageService.SendMessageAsync(channel, message);
+                }
+            }
         }
 
         [ConsoleCommand("restart")]
+        [ConsoleAlias("reload")]
         public async Task Restart()
         {
             System.Console.WriteLine("restart");
         }
 
-        [ConsoleCommand("exit", aliases: "quit")]
+        [ConsoleCommand("stop")]
+        [ConsoleAlias("exit", "quit")]
         public async Task Exit()
         {
-            System.Console.WriteLine("exit");
+            System.Console.WriteLine("stop");
         }
     }
 }

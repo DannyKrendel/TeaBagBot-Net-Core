@@ -4,7 +4,7 @@ namespace TeaBagBot.Core.Commands
 {
     public interface ICommandHandler<T>
     {
-        Task HandleMessageAsync(T msg);
+        Task HandleCommandAsync(T message);
         Task InitializeAsync();
     }
 }

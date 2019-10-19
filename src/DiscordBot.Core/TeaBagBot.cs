@@ -52,10 +52,10 @@ namespace TeaBagBot.Core
                 await _logger.LogErrorAsync("Discord", ex);
                 await StopAsync();
             }
-            finally
-            {
-                await Task.Delay(-1, _cancelTokenSource.Token);
-            }
+            //finally
+            //{
+            //    await Task.Delay(-1, _cancelTokenSource.Token);
+            //}
         }
 
         public async Task StopAsync()

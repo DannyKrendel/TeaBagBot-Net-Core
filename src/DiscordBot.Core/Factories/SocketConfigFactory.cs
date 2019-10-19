@@ -9,7 +9,7 @@ namespace TeaBagBot.Core.Factories
         {
             return new DiscordSocketConfig()
             {
-                LogLevel = LogSeverity.Debug
+                LogLevel = LogSeverity.Info
             };
         }
 
