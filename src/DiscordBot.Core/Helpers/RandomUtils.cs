@@ -32,6 +32,10 @@ namespace TeaBagBot.Core.Helpers
 
         public static T GetRandomFrom<T>(IEnumerable<T> collection)
         {
+            if (collection == null || collection.Count() == 0)
+                return default;
+            else if (collection.Count() == 1)
+                return collection.First();
             return collection.ElementAt(GetRandom(0, collection.Count() - 1));
         }
     }

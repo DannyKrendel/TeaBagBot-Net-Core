@@ -34,6 +34,7 @@ namespace TeaBagBot.Core.Messages
 
         public string GetRandomResponseByMessage(string message)
         {
+            var foundResponses = new List<TeaBagResponse>();
             Regex regex;
 
             foreach (var response in Responses)
@@ -41,12 +42,22 @@ namespace TeaBagBot.Core.Messages
                 if (string.IsNullOrEmpty(response.Pattern))
                     continue;
                 regex = new Regex(response.Pattern);
-                if (regex.IsMatch(message))
+                var match = regex.Match(message);
+                if (match.Success)
                 {
-                    return RandomUtils.GetRandomFrom(response.Responses);
+                    foundResponses.Add(response);
                 }
             }
-            return null;
+
+            if (foundResponses.Count == 0)
+                return null;
+
+            var defaultResponse = foundResponses.FirstOrDefault(r => r.Pattern == ".*");
+
+            if (defaultResponse != null && foundResponses.Count > 1)
+                foundResponses.Remove(defaultResponse);
+
+            return RandomUtils.GetRandomFrom(RandomUtils.GetRandomFrom(foundResponses).Responses);
         }
     }
 }

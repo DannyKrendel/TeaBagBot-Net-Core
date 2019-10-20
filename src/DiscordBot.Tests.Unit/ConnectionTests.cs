@@ -1,7 +1,7 @@
 ﻿using TeaBagBot.Core;
-using TeaBagBot.ConsoleApp;
 using System.Threading.Tasks;
 using Xunit;
+using TeaBagBot.ConsoleApp.DI;
 
 namespace TeaBagBot.Tests.Unit
 {

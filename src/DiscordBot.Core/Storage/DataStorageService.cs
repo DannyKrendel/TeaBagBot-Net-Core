@@ -57,7 +57,7 @@ namespace TeaBagBot.Core.Storage
                 commandGroups.Add(new TeaBagCommandGroup(group, commands));
             }
 
-            _memoryStorage.StoreObject(commandGroups, "CommandGroups");
+            _memoryStorage.StoreObject(commandGroups.AsReadOnly(), "CommandGroups");
 
             var rPaths = Directory.GetFiles(_responsesPath);
 
@@ -69,7 +69,7 @@ namespace TeaBagBot.Core.Storage
                 responses.Add(response);
             }
 
-            _memoryStorage.StoreObject(responses, "Responses");
+            _memoryStorage.StoreObject(responses.AsReadOnly(), "Responses");
         }
 
         public void SaveEverythingToJson()
@@ -77,7 +77,7 @@ namespace TeaBagBot.Core.Storage
             var config = _memoryStorage.RestoreObject<TeaBagConfig>("Config");
             _jsonStorage.StoreObject(config, _configPath);
 
-            var commandGroups = _memoryStorage.RestoreObject<IEnumerable<TeaBagCommandGroup>>("CommandGroups");
+            var commandGroups = _memoryStorage.RestoreObject<IReadOnlyCollection<TeaBagCommandGroup>>("CommandGroups");
 
             foreach (var commandGroup in commandGroups)
             {
@@ -88,12 +88,12 @@ namespace TeaBagBot.Core.Storage
                 }
             }
 
-            var responses = _memoryStorage.RestoreObject<IEnumerable<TeaBagResponse>>("Responses");
+            var responses = _memoryStorage.RestoreObject<IReadOnlyCollection<TeaBagResponse>>("Responses");
 
             foreach (var response in responses)
             {
                 var path = Path.Combine(_responsesPath, response.Name);
-                _jsonStorage.StoreObject(responses, path);
+                _jsonStorage.StoreObject(response, path);
             }
         }
     }

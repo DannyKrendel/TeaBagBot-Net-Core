@@ -1,14 +1,14 @@
-﻿using TeaBagBot.ConsoleApp;
-using TeaBagBot.ConsoleApp.Commands;
+﻿using TeaBagBot.ConsoleApp.Commands;
 using TeaBagBot.Core.Logging;
 using Unity;
-using Unity.Injection;
-using TeaBagBot.Core.Helpers;
 using TeaBagBot.ConsoleApp.Logging;
 using TeaBagBot.Core.Commands;
 using TeaBagBot.Core.DI;
+using Unity.Injection;
+using System;
+using Unity.Resolution;
 
-namespace TeaBagBot.ConsoleApp
+namespace TeaBagBot.ConsoleApp.DI
 {
     public static class UnityDI
     {
@@ -30,16 +30,22 @@ namespace TeaBagBot.ConsoleApp
 
             _container.RegisterCoreTypes();
             _container.RegisterSingleton<ILogger, ConsoleLogger>();
-            _container.RegisterSingleton<ConsoleCommandBuilder>();
             _container.RegisterSingleton<ConsoleCommandService>();
+            _container.RegisterSingleton<ConsoleCommandBuilder>();
+            _container.RegisterFactory<IServiceProvider>("console", x => Resolve<ConsoleServiceBuilder>().BuildServices());
             _container.RegisterSingleton<ICommandHandler<string>, ConsoleCommandHandler>();
 
             _container.AddExtension(new Diagnostic());
         }
 
-        public static T Resolve<T>()
+        public static T Resolve<T>(string name, params ResolverOverride[] overrides)
         {
-            return Container.Resolve<T>();
+            return Container.Resolve<T>(name, overrides);
+        }
+
+        public static T Resolve<T>(params ResolverOverride[] overrides)
+        {
+            return Container.Resolve<T>(overrides);
         }
     }
 }

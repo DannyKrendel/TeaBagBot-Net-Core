@@ -1,4 +1,4 @@
-﻿using TeaBagBot.ConsoleApp;
+﻿using TeaBagBot.ConsoleApp.DI;
 using Xunit;
 
 namespace TeaBagBot.Tests.Unit

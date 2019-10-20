@@ -9,11 +9,13 @@ namespace TeaBagBot.ConsoleApp.Modules
     {
         private readonly ConfigService _configService;
         private readonly DiscordMessageService _messageService;
+        private readonly IBot _bot;
 
-        public ConsoleModule(ConfigService configService, DiscordMessageService messageService)
+        public ConsoleModule(ConfigService configService, DiscordMessageService messageService, IBot bot)
         {
             _configService = configService;
             _messageService = messageService;
+            _bot = bot;
         }
 
         [ConsoleCommand("help")]
@@ -48,14 +50,20 @@ namespace TeaBagBot.ConsoleApp.Modules
         [ConsoleAlias("reload")]
         public async Task Restart()
         {
-            System.Console.WriteLine("restart");
+            await _bot.StopAsync().ContinueWith(x => _bot.StartAsync());
+        }
+
+        [ConsoleCommand("start")]
+        public async Task Start()
+        {
+            await _bot.StartAsync();
         }
 
         [ConsoleCommand("stop")]
         [ConsoleAlias("exit", "quit")]
-        public async Task Exit()
+        public async Task Stop()
         {
-            System.Console.WriteLine("stop");
+            await _bot.StopAsync();
         }
     }
 }

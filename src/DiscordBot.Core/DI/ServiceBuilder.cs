@@ -10,7 +10,7 @@ namespace TeaBagBot.Core
     {
         private readonly DiscordSocketClient _client;
         private readonly EmbedService _embedService;
-        private readonly TeaBagCommandProvider _commandManager;
+        private readonly TeaBagCommandProvider _commandProvider;
         private readonly ConfigService _configService;
         private readonly ResponseParser _responseParser;
         private readonly DiscordMessageService _messageService;
@@ -22,7 +22,7 @@ namespace TeaBagBot.Core
         {
             _client = client;
             _embedService = embedService;
-            _commandManager = commandManager;
+            _commandProvider = commandManager;
             _configService = config;
             _responseParser = responseParser;
             _messageService = messageService;
@@ -31,7 +31,7 @@ namespace TeaBagBot.Core
 
         public IServiceProvider BuildServices() => new ServiceCollection()
             .AddSingleton(_embedService)
-            .AddSingleton(_commandManager)
+            .AddSingleton(_commandProvider)
             .AddSingleton(_client)
             .AddSingleton(_configService)
             .AddSingleton(_responseParser)

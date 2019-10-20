@@ -37,7 +37,7 @@ namespace TeaBagBot.Core.Messages
             if (msg.HasMentionPrefix(_client.CurrentUser, ref argPos))
             {
                 string rawResponse = _responseProvider.GetRandomResponseByMessage(msg.Content.Substring(argPos));
-                if (rawResponse != null)
+                if (string.IsNullOrEmpty(rawResponse) == false)
                 {
                     string response = _responseParser.Parse(rawResponse, new TeaBagMessageContext(msg));
                     await msg.Channel.SendMessageAsync(response);

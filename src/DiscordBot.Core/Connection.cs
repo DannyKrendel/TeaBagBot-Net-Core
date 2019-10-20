@@ -36,7 +36,6 @@ namespace TeaBagBot.Core
         {
             await _client.LogoutAsync();
             await _client.StopAsync();
-
             _client.Log -= _logger.LogAsync;
         }
     }

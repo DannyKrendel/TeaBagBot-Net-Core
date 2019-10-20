@@ -1,0 +1,12 @@
+{
+  "Name": "HowAreYou",
+  "Pattern": "(?:[^а-яА-Яa-zA-Z]|^)(как дела|че как|чё как)(?:[^а-яА-Яa-zA-Z]|$)",
+  "Responses": [
+    "$AuthorMention$, норм.",
+    "$AuthorMention$, могло быть и лучше, а у тебя?",
+    "$AuthorMention$, ну как сказать...",
+    "$AuthorMention$, уже лучше.",
+    "$AuthorMention$, да как-то никак.",
+    "$AuthorMention$, было бы лучше, если бы ты принёс чай."
+  ]
+}

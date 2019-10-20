@@ -1,0 +1,10 @@
+{
+  "Name": "GoodNight",
+  "Pattern": "(?:[^а-яА-Яa-zA-Z]|^)(споки|споке|спокойной ночи|сладких снов)(?:[^а-яА-Яa-zA-Z]|$)",
+  "Responses": [
+    "$AuthorMention$, споки.",
+    "Сладких снов, $AuthorMention$",
+    "$AuthorMention$, спокойной ночи.",
+    "$AuthorMention$, ночи."
+  ]
+}

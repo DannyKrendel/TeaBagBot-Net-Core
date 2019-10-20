@@ -39,10 +39,10 @@ namespace TeaBagBot.Core.DI
             container.RegisterSingleton<IBot, TeaBagBot>();
             container.RegisterSingleton<ServiceBuilder>();
             container.RegisterSingleton<EmbedService>();
-            container.RegisterFactory<IServiceProvider>(x => container.Resolve<ServiceBuilder>().BuildServices());
             container.RegisterSingleton<TeaBagCommandProvider>();
             container.RegisterSingleton<TeaBagCommandService>();
             container.RegisterSingleton<Connection>();
+            container.RegisterFactory<IServiceProvider>(x => container.Resolve<ServiceBuilder>().BuildServices());
             container.RegisterSingleton<ICommandHandler<SocketMessage>, CommandHandler>();
             container.RegisterSingleton<ResponseParser>();
             container.RegisterSingleton<DiscordMessageService>();
