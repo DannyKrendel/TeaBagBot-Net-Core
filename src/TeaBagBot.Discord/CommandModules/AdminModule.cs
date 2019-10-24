@@ -1,10 +1,11 @@
 ﻿using Discord.Commands;
 using Discord.WebSocket;
 using TeaBagBot.Core.Commands;
-using TeaBagBot.Core.Attributes;
 using System.Threading.Tasks;
+using TeaBagBot.Core;
+using TeaBagBot.Discord.Attributes;
 
-namespace TeaBagBot.Core.Modules
+namespace TeaBagBot.Discord.CommandModules
 {
     [RequirePermissions(PermissionGroup.Admin)]
     public class AdminModule : ModuleBase

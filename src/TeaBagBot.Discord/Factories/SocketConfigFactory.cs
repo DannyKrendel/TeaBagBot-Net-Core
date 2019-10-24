@@ -1,7 +1,7 @@
 ﻿using Discord;
 using Discord.WebSocket;
 
-namespace TeaBagBot.Core.Factories
+namespace TeaBagBot.Discord.Factories
 {
     public static class SocketConfigFactory
     {

@@ -3,7 +3,7 @@ using TeaBagBot.Core.Logging;
 using Unity;
 using TeaBagBot.ConsoleApp.Logging;
 using TeaBagBot.Core.Commands;
-using TeaBagBot.Core.DI;
+using TeaBagBot.Discord.DI;
 using Unity.Injection;
 using System;
 using Unity.Resolution;

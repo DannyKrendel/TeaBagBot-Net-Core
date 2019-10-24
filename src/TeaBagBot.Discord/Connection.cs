@@ -1,10 +1,10 @@
 ﻿using Discord;
 using Discord.WebSocket;
-using TeaBagBot.Core.Logging;
+using TeaBagBot.Discord.Logging;
 using System;
 using System.Threading.Tasks;
 
-namespace TeaBagBot.Core
+namespace TeaBagBot.Discord
 {
     public class Connection
     {

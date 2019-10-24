@@ -1,13 +1,14 @@
 ﻿using Discord.WebSocket;
 using TeaBagBot.Core.Commands;
-using TeaBagBot.Core.Logging;
+using TeaBagBot.Discord.Logging;
 using TeaBagBot.Core.Storage;
 using System;
 using System.Threading;
 using System.Threading.Tasks;
 using TeaBagBot.Core.Messages;
+using TeaBagBot.Core;
 
-namespace TeaBagBot.Core
+namespace TeaBagBot.Discord
 {
     public class TeaBagBot : IBot
     {

@@ -1,10 +1,10 @@
 ﻿using Discord;
 using Discord.Commands;
-using TeaBagBot.Core.Logging.Entities;
 using System;
 using System.Threading.Tasks;
+using TeaBagBot.Core.Logging;
 
-namespace TeaBagBot.Core.Logging
+namespace TeaBagBot.Discord.Logging
 {
     public class DiscordLogger
     {

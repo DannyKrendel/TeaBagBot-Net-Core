@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Text;
 
-namespace TeaBagBot.Core.Logging.Entities
+namespace TeaBagBot.Core.Logging
 {
     public struct BotLogMessage
     {

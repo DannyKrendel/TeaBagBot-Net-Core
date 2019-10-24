@@ -2,8 +2,8 @@
 using Discord.WebSocket;
 using TeaBagBot.Core.Commands;
 using TeaBagBot.Core.Entities;
-using TeaBagBot.Core.Factories;
-using TeaBagBot.Core.Logging;
+using TeaBagBot.Discord.Factories;
+using TeaBagBot.Discord.Logging;
 using TeaBagBot.Core.Storage;
 using TeaBagBot.Core.Storage.Json;
 using TeaBagBot.Core.Storage.Memory;
@@ -12,8 +12,11 @@ using System.IO.Abstractions;
 using Unity;
 using Unity.Injection;
 using TeaBagBot.Core.Messages;
+using TeaBagBot.Core;
+using TeaBagBot.Discord.Commands;
+using TeaBagBot.Discord.Messages;
 
-namespace TeaBagBot.Core.DI
+namespace TeaBagBot.Discord.DI
 {
     public static class UnityContainerExtensions
     {

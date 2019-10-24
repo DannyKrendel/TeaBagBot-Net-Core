@@ -1,6 +1,4 @@
-﻿using TeaBagBot.Core.Logging.Entities;
-
-namespace TeaBagBot.Core.Logging
+﻿namespace TeaBagBot.Core.Logging
 {
     public interface ILogger
     {

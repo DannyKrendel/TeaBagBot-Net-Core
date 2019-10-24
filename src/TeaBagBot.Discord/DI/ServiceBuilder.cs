@@ -3,8 +3,9 @@ using TeaBagBot.Core.Commands;
 using Microsoft.Extensions.DependencyInjection;
 using System;
 using TeaBagBot.Core.Messages;
+using TeaBagBot.Core;
 
-namespace TeaBagBot.Core
+namespace TeaBagBot.Discord.DI
 {
     public class ServiceBuilder
     {
@@ -17,7 +18,7 @@ namespace TeaBagBot.Core
         private readonly ResponseProvider _responseProvider;
 
         public ServiceBuilder(DiscordSocketClient client, EmbedService embedService,
-            TeaBagCommandProvider commandManager, ConfigService config, ResponseParser responseParser, 
+            TeaBagCommandProvider commandManager, ConfigService config, ResponseParser responseParser,
             DiscordMessageService messageService, ResponseProvider responseProvider)
         {
             _client = client;

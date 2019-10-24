@@ -2,8 +2,9 @@
 using Discord.WebSocket;
 using System.Collections.Generic;
 using System.Linq;
+using TeaBagBot.Core.Messages;
 
-namespace TeaBagBot.Core.Messages
+namespace TeaBagBot.Discord.Messages
 {
     public class TeaBagMessageContext : ITeaBagMessageContext
     {

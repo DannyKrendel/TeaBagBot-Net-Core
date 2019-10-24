@@ -1,12 +1,10 @@
 ﻿using Discord.Commands;
 using Discord.WebSocket;
-using System;
-using System.Collections.Generic;
-using System.Text;
 using System.Threading.Tasks;
-using TeaBagBot.Core.Logging;
+using TeaBagBot.Discord.Logging;
+using TeaBagBot.Core.Messages;
 
-namespace TeaBagBot.Core.Messages
+namespace TeaBagBot.Discord.Messages
 {
     public class MessageHandler : IMessageHandler<SocketMessage>
     {

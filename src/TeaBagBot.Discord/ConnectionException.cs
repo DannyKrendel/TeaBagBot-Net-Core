@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace TeaBagBot.Core
+namespace TeaBagBot.Discord
 {
     public class ConnectionException : Exception
     {

@@ -1,6 +1,5 @@
 ﻿using System;
 using TeaBagBot.Core.Logging;
-using TeaBagBot.Core.Logging.Entities;
 
 namespace TeaBagBot.ConsoleApp.Logging
 {

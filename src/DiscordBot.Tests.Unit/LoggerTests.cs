@@ -1,5 +1,5 @@
 ﻿using TeaBagBot.ConsoleApp.Logging;
-using TeaBagBot.Core.Logging.Entities;
+using TeaBagBot.Core.Logging;
 using Xunit;
 
 namespace TeaBagBot.Tests.Unit

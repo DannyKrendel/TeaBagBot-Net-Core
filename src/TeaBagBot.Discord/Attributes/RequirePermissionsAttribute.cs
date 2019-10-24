@@ -2,8 +2,9 @@
 using Discord.WebSocket;
 using System;
 using System.Threading.Tasks;
+using TeaBagBot.Core;
 
-namespace TeaBagBot.Core.Attributes
+namespace TeaBagBot.Discord.Attributes
 {
     public class RequirePermissionsAttribute : PreconditionAttribute
     {

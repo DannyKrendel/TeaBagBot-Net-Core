@@ -2,6 +2,7 @@
 using TeaBagBot.Core;
 using System;
 using System.Threading.Tasks;
+using TeaBagBot.Discord;
 
 namespace TeaBagBot.ConsoleApp.Modules
 {

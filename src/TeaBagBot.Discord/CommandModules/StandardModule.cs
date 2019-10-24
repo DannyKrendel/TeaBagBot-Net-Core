@@ -2,15 +2,17 @@
 using Discord.Commands;
 using Discord.WebSocket;
 using TeaBagBot.Core.Commands;
-using TeaBagBot.Core.Attributes;
 using TeaBagBot.Core.Entities;
 using System;
 using System.Linq;
 using System.Threading.Tasks;
 using TeaBagBot.Core.Helpers;
 using TeaBagBot.Core.Messages;
+using TeaBagBot.Core;
+using TeaBagBot.Discord.Messages;
+using TeaBagBot.Discord.Attributes;
 
-namespace TeaBagBot.Core.Modules
+namespace TeaBagBot.Discord.CommandModules
 {
     [RequirePermissions(PermissionGroup.Standard)]
     public class StandardModule : ModuleBase
@@ -22,7 +24,7 @@ namespace TeaBagBot.Core.Modules
         private readonly ResponseParser _responseParser;
         private readonly ResponseProvider _responseProvider;
 
-        public StandardModule(DiscordSocketClient client, EmbedService embedService, TeaBagCommandProvider commandManager, 
+        public StandardModule(DiscordSocketClient client, EmbedService embedService, TeaBagCommandProvider commandManager,
             ConfigService configService, ResponseParser responseParser, ResponseProvider responseProvider)
         {
             _client = client;

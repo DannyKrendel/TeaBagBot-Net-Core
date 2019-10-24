@@ -1,4 +1,4 @@
-﻿namespace TeaBagBot.Core.Logging.Entities
+﻿namespace TeaBagBot.Core.Logging
 {
     public enum BotLogSeverity
     {
