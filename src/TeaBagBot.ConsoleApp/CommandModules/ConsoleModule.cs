@@ -4,7 +4,7 @@ using System;
 using System.Threading.Tasks;
 using TeaBagBot.Discord;
 
-namespace TeaBagBot.ConsoleApp.Modules
+namespace TeaBagBot.ConsoleApp.CommandModules
 {
     public class ConsoleModule : ConsoleModuleBase
     {
@@ -22,7 +22,7 @@ namespace TeaBagBot.ConsoleApp.Modules
         [ConsoleCommand("help")]
         public async Task Help()
         {
-            System.Console.WriteLine("help");
+            Console.WriteLine("help");
         }
 
         [ConsoleCommand("say")]

@@ -30,6 +30,7 @@ namespace TeaBagBot.ConsoleApp.DI
 
             _container.RegisterCoreTypes();
             _container.RegisterSingleton<ILogger, ConsoleLogger>();
+            _container.RegisterSingleton<ConsoleCommandParser>();
             _container.RegisterSingleton<ConsoleCommandService>();
             _container.RegisterSingleton<ConsoleCommandBuilder>();
             _container.RegisterFactory<IServiceProvider>("console", x => Resolve<ConsoleServiceBuilder>().BuildServices());

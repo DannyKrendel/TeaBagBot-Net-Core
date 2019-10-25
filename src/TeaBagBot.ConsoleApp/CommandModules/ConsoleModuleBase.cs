@@ -1,6 +1,6 @@
 ﻿using TeaBagBot.ConsoleApp.Commands;
 
-namespace TeaBagBot.ConsoleApp.Modules
+namespace TeaBagBot.ConsoleApp.CommandModules
 {
     public abstract class ConsoleModuleBase : ConsoleModuleBase<IConsoleCommandContext> { }
 
