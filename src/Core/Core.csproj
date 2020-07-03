@@ -13,7 +13,7 @@
 
   <ItemGroup>
     <PackageReference Include="Discord.Net" Version="2.2.0" />
-    <PackageReference Include="Google.Apis.Sheets.v4" Version="1.46.0.2000" />
+    <PackageReference Include="Google.Apis.Sheets.v4" Version="1.47.0.2007" />
     <PackageReference Include="Microsoft.Extensions.Configuration.FileExtensions" Version="3.1.5" />
     <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="3.1.5" />
     <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="3.1.5" />
@@ -21,8 +21,8 @@
     <PackageReference Include="MongoDB.Bson" Version="2.10.4" />
     <PackageReference Include="MongoDB.Driver" Version="2.10.4" />
     <PackageReference Include="Serilog.AspNetCore" Version="3.2.0" />
-    <PackageReference Include="System.IO.Abstractions" Version="12.0.3" />
-    <PackageReference Include="System.IO.Abstractions.TestingHelpers" Version="12.0.3" />
+    <PackageReference Include="System.IO.Abstractions" Version="12.0.4" />
+    <PackageReference Include="System.IO.Abstractions.TestingHelpers" Version="12.0.4" />
     <PackageReference Include="Unity" Version="5.11.7" />
   </ItemGroup>
 
