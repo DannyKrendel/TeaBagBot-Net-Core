@@ -4,7 +4,7 @@ image: Visual Studio 2019 Preview
 install:
  - cinst opencover.portable
  - cinst codecov
- - nuget restore
+ - nuget restore src
 
 test_script:
  - ps: ./coverage.ps1
