@@ -1,0 +1,9 @@
+install:
+ - cinst opencover.portable
+ - cinst codecov
+
+test_script:
+ - ps: ./coverage.ps1
+
+after_test:
+ - codecov -f coverage.xml
