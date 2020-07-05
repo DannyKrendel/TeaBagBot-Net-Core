@@ -10,26 +10,29 @@ namespace TeaBagBot.DI
 {
     public class ServiceBuilder
     {
+        private readonly IRepository<BotConfig> _configRepository;
         private readonly DiscordSocketClient _client;
         private readonly EmbedService _embedService;
         private readonly TeaBagCommandService _commandService;
         private readonly ResponseParser _responseParser;
         private readonly ResponseService _responseService;
         private readonly GamesListService _gamesListService;
-        private readonly IRepository<BotConfig> _configRepository; 
+        private readonly LinkService _linkService;
 
-        public ServiceBuilder(DiscordSocketClient client, EmbedService embedService,
+        public ServiceBuilder(IRepository<BotConfig> configRepository, 
+            DiscordSocketClient client, EmbedService embedService,
             TeaBagCommandService commandService, ResponseParser responseParser,
             ResponseService responseService, GamesListService gamesListService,
-            IRepository<BotConfig> configRepository)
+            LinkService linkService)
         {
+            _configRepository = configRepository;
             _client = client;
             _embedService = embedService;
             _commandService = commandService;
             _responseParser = responseParser;
             _responseService = responseService;
             _gamesListService = gamesListService;
-            _configRepository = configRepository;
+            _linkService = linkService;
         }
 
         public IServiceProvider BuildServices() => new ServiceCollection()
@@ -40,6 +43,7 @@ namespace TeaBagBot.DI
             .AddSingleton(_responseService)
             .AddSingleton(_gamesListService)
             .AddSingleton(_configRepository)
+            .AddSingleton(_linkService)
             .BuildServiceProvider();
     }
 }

@@ -29,8 +29,8 @@ namespace TeaBagBot.Services
                 {
                     case CommandError.UnknownCommand:
                         reason = $"{context.User.Mention}, вы ввели неизвестную команду.";
-                        _logger.Warning("Введена неизвестная команда. Пользователь: {user}", 
-                            command.Value.Name, context.User);
+                        _logger.Warning("Введена неизвестная команда: {message}. Пользователь: {user}", 
+                            context.Message, context.User);
                         break;
                     case CommandError.ParseFailed:
                         reason = $"{context.User.Mention}, команду невозможно обработать.";

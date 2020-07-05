@@ -49,6 +49,7 @@ namespace TeaBagBot.DI
             container.RegisterSingleton<GamesListService>();
             container.RegisterFactory<IMongoDbSettings>(x => container.Resolve<SettingsService>().Load().MongoDbSettings);
             container.RegisterType(typeof(IRepository<>), typeof(MongoRepository<>));
+            container.RegisterSingleton<LinkService>();
         }
     }
 }
