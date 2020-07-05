@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json;
+﻿using Discord;
+using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
 
 namespace TeaBagBot.DataAccess.Models
@@ -10,6 +11,7 @@ namespace TeaBagBot.DataAccess.Models
         public string Description { get; set; }
         public string[] Aliases { get; set; }
         [JsonConverter(typeof(StringEnumConverter))]
-        public PermissionGroup PermissionGroup { get; set; }
+        public GuildPermission Permissions { get; set; }
+        public ModuleGroup Group { get; set; }
     }
 }

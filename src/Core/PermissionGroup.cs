@@ -1,8 +1,8 @@
 ﻿namespace TeaBagBot
 {
-    public enum PermissionGroup
+    public enum ModuleGroup
     {
-        Standard = 1024,
-        Admin = 2146958847
+        Standard,
+        Admin
     }
 }

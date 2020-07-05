@@ -11,7 +11,6 @@ using TeaBagBot.Services;
 
 namespace TeaBagBot.Modules
 {
-    [RequirePermissions(PermissionGroup.Standard)]
     public class CustomModule : ModuleBase
     {
         private readonly DiscordSocketClient _client;
@@ -36,8 +35,7 @@ namespace TeaBagBot.Modules
             _linkService = linkService;
         }
 
-        [Command("game")]
-        [Alias("игра")]
+        [TeaBagCommand, Aliases, Description, UserPermission]
         public async Task Game([Remainder] string gameTitle)
         {
             Embed embed = null;
@@ -58,8 +56,7 @@ namespace TeaBagBot.Modules
             await ReplyAsync(embed: embed);
         }
 
-        [Command("youtube")]
-        [Alias("yt", "ютуб")]
+        [TeaBagCommand, Aliases, Description, UserPermission]
         public async Task YouTube()
         {
             Embed embed = null;
@@ -73,8 +70,7 @@ namespace TeaBagBot.Modules
             await ReplyAsync(embed: embed);
         }
 
-        [Command("twitch")]
-        [Alias("твич")]
+        [TeaBagCommand, Aliases, Description, UserPermission]
         public async Task Twitch()
         {
             Embed embed = null;
@@ -88,8 +84,7 @@ namespace TeaBagBot.Modules
             await ReplyAsync(embed: embed);
         }
 
-        [Command("steam")]
-        [Alias("стим")]
+        [TeaBagCommand, Aliases, Description, UserPermission]
         public async Task Steam()
         {
             Embed embed = null;
@@ -103,8 +98,7 @@ namespace TeaBagBot.Modules
             await ReplyAsync(embed: embed);
         }
 
-        [Command("discord")]
-        [Alias("дискорд", "инвайт", "invite")]
+        [TeaBagCommand, Aliases, Description, UserPermission]
         public async Task Discord()
         {
             Embed embed = null;
@@ -118,8 +112,7 @@ namespace TeaBagBot.Modules
             await ReplyAsync(embed: embed);
         }
 
-        [Command("donate")]
-        [Alias("донат")]
+        [TeaBagCommand, Aliases, Description, UserPermission]
         public async Task Donate()
         {
             Embed embed = null;
@@ -133,8 +126,7 @@ namespace TeaBagBot.Modules
             await ReplyAsync(embed: embed);
         }
 
-        [Command("vk")]
-        [Alias("вк")]
+        [TeaBagCommand, Aliases, Description, UserPermission]
         public async Task VK()
         {
             Embed embed = null;

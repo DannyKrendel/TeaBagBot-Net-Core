@@ -1,7 +1,9 @@
 ﻿using System.Collections.Generic;
+using System.IO.Abstractions;
 using System.Linq;
 using TeaBagBot.DataAccess;
 using TeaBagBot.DataAccess.Models;
+using TeaBagBot.Helpers;
 
 namespace TeaBagBot.Services
 {
@@ -17,21 +19,22 @@ namespace TeaBagBot.Services
             Commands = commandRepository.AsQueryable().ToList();
         }
 
-        public IReadOnlyCollection<TeaBagCommand> GetCommands(PermissionGroup group)
+        public IReadOnlyCollection<TeaBagCommand> GetCommandsInGroup(ModuleGroup group)
         {
-            return Commands.Where(c => c.PermissionGroup == group).ToList();
+            return Commands.Where(c => c.Group == group).ToList();
         }
 
-        public TeaBagCommand GetCommand(string name, PermissionGroup? group = null)
+        public TeaBagCommand GetCommand(string name)
         {
-            if (group.HasValue)
-            {
-                return Commands.FirstOrDefault(c => c.Name.ToLower() == name.ToLower() && c.PermissionGroup == group);
-            }
-            else
-            {
-                return Commands.FirstOrDefault(c => c.Name.ToLower() == name.ToLower());
-            }
+            return Commands.FirstOrDefault(c => c.Name.ToLower() == name.ToLower());
+        }
+
+        public static TeaBagCommand GetCommand<T>(string name) where T : IRepository<TeaBagCommand>
+        {
+            var constructor = GenericUtils.CreateConstructor<T>(typeof(MongoDbSettings));
+            var commandRepo = constructor(new SettingsService(new FileSystem()).Load().MongoDbSettings) as IRepository<TeaBagCommand>;
+            
+            return commandRepo.FindOne(c => c.Name.ToLower() == name.ToLower());
         }
     }
 }

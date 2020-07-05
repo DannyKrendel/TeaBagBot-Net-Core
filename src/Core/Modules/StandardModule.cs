@@ -14,7 +14,6 @@ using System.Collections.Generic;
 
 namespace TeaBagBot.Modules
 {
-    [RequirePermissions(PermissionGroup.Standard)]
     public class StandardModule : ModuleBase
     {
         private readonly DiscordSocketClient _client;
@@ -36,8 +35,7 @@ namespace TeaBagBot.Modules
             _gameListService = gameListService;
         }
 
-        [Command("help")]
-        [Alias("помощь", "помоги", "хелп")]
+        [TeaBagCommand, Aliases, Description, UserPermission]
         public async Task Help(string commandName = null)
         {
             string GetCommandInfo(TeaBagCommand command)
@@ -65,13 +63,13 @@ namespace TeaBagBot.Modules
                 string commandInfo = $"**{_commandManager.GetCommand("help").Description}**\n";
 
                 commandInfo += "Список стандартных команд:\n```\n";
-                foreach (var command in _commandManager.GetCommands(PermissionGroup.Standard).OrderBy(s => s.Name))
+                foreach (var command in _commandManager.GetCommandsInGroup(ModuleGroup.Standard).OrderBy(s => s.Name))
                 {
                     commandInfo += GetCommandInfo(command);
                 }
                 commandInfo += "\n```\n";
                 commandInfo += "Список админских команд:\n```\n";
-                foreach (var command in _commandManager.GetCommands(PermissionGroup.Admin).OrderBy(s => s.Name))
+                foreach (var command in _commandManager.GetCommandsInGroup(ModuleGroup.Admin).OrderBy(s => s.Name))
                 {
                     commandInfo += GetCommandInfo(command);
                 }
@@ -104,8 +102,7 @@ namespace TeaBagBot.Modules
             await ReplyAsync(embed: embed);
         }
 
-        [Command("say")]
-        [Alias("echo", "скажи", "повтори")]
+        [TeaBagCommand, Aliases, Description, UserPermission]
         public async Task Say([Remainder] string message)
         {
             var embed = _embedService.GetInfoEmbed(message, "");
@@ -114,15 +111,13 @@ namespace TeaBagBot.Modules
             await ReplyAsync(message);
         }
 
-        [Command("ping")]
-        [Alias("пинг")]
+        [TeaBagCommand, Aliases, Description, UserPermission]
         public async Task Ping()
         {
             await ReplyAsync($"{Context.User.Mention}, понг! ({_client.Latency}мс)");
         }
 
-        [Command("8ball")]
-        [Alias("шар", "предсказание")]
+        [TeaBagCommand, Aliases, Description, UserPermission]
         public async Task Ball([Remainder] string question)
         {
             string rawResponse = await _responseService.GetRandomResponseByCommandNameAsync("8ball");
@@ -141,8 +136,7 @@ namespace TeaBagBot.Modules
             await ReplyAsync(embed: embed);
         }
 
-        [Command("pick")]
-        [Alias("выбор", "выбери")]
+        [TeaBagCommand, Aliases, Description, UserPermission]
         public async Task Pick([Remainder] string message)
         {
             string[] options = message.Split(new char[] { '|' }, StringSplitOptions.RemoveEmptyEntries);
@@ -161,86 +155,90 @@ namespace TeaBagBot.Modules
             await ReplyAsync(embed: embed);
         }
 
-        [Command("poll")]
-        [Alias("vote", "опрос")]
-        public async Task Poll([Remainder]string message)
+        [TeaBagCommand, Aliases, Description, UserPermission]
+        public async Task Poll([Remainder] string message)
         {
-            Embed embed = null;
             var emotes = new List<IEmote>();
-            var args = Regex.Split(message, @"^\'|\'\s\'|\'+$", RegexOptions.Multiline).Where(s => !string.IsNullOrEmpty(s)).ToArray();
+            var args = Regex.Split(message, @"^\'|\'\s+\'|\'+$", RegexOptions.Multiline).Where(s => !string.IsNullOrEmpty(s)).ToArray();
             var question = args[0];
-            var options = args.Skip(1).Select(o => o + "\n").ToArray();
+            var options = args.Skip(1).ToArray();
 
             if (args.Length <= 1)
             {
-                embed = _embedService.GetErrorEmbed("Ошибка!", $"Неверное использование команды. Напишите `help poll`");
+                var embed = _embedService.GetErrorEmbed("Ошибка!", $"Неверное использование команды. Напишите `help poll`");
+                await ReplyAsync(embed: embed);
+                return;
             }
-            else
-            {
-                for (int i = 0; i < options.Length; i++)
-                {
-                    string firstString = new string(options[i].TakeWhile(c => c != ' ').ToArray());
 
-                    if (firstString.Length > 0 && int.TryParse(firstString.TakeWhile(c => char.IsDigit(c)).ToArray(), out int number) && number >= 0 && number <= 10)
+            for (int i = 0; i < options.Length; i++)
+            {
+                var wordsArr = options[i].Split(' ', StringSplitOptions.RemoveEmptyEntries);
+                string firstString = wordsArr[0];
+
+                if (firstString.Length > 0 && int.TryParse(firstString.TakeWhile(c => char.IsDigit(c)).ToArray(), out int number) && number >= 0 && number <= 10)
+                {
+                    switch (number)
                     {
-                        switch (number)
-                        {
-                            case 0:
-                                emotes.Add(new Emoji("0\u20e3"));
-                                break;
-                            case 1:
-                                emotes.Add(new Emoji("1\u20e3"));
-                                break;
-                            case 2:
-                                emotes.Add(new Emoji("2\u20e3"));
-                                break;
-                            case 3:
-                                emotes.Add(new Emoji("3\u20e3"));
-                                break;
-                            case 4:
-                                emotes.Add(new Emoji("4\u20e3"));
-                                break;
-                            case 5:
-                                emotes.Add(new Emoji("5\u20e3"));
-                                break;
-                            case 6:
-                                emotes.Add(new Emoji("6\u20e3"));
-                                break;
-                            case 7:
-                                emotes.Add(new Emoji("7\u20e3"));
-                                break;
-                            case 8:
-                                emotes.Add(new Emoji("8\u20e3"));
-                                break;
-                            case 9:
-                                emotes.Add(new Emoji("9\u20e3"));
-                                break;
-                            case 10:
-                                emotes.Add(new Emoji("\uD83D\uDD1F"));
-                                break;
-                        }
+                        case 0:
+                            emotes.Add(new Emoji("0\u20e3"));
+                            break;
+                        case 1:
+                            emotes.Add(new Emoji("1\u20e3"));
+                            break;
+                        case 2:
+                            emotes.Add(new Emoji("2\u20e3"));
+                            break;
+                        case 3:
+                            emotes.Add(new Emoji("3\u20e3"));
+                            break;
+                        case 4:
+                            emotes.Add(new Emoji("4\u20e3"));
+                            break;
+                        case 5:
+                            emotes.Add(new Emoji("5\u20e3"));
+                            break;
+                        case 6:
+                            emotes.Add(new Emoji("6\u20e3"));
+                            break;
+                        case 7:
+                            emotes.Add(new Emoji("7\u20e3"));
+                            break;
+                        case 8:
+                            emotes.Add(new Emoji("8\u20e3"));
+                            break;
+                        case 9:
+                            emotes.Add(new Emoji("9\u20e3"));
+                            break;
+                        case 10:
+                            emotes.Add(new Emoji("\uD83D\uDD1F"));
+                            break;
+                    }
+                }
+                else
+                {
+                    IEmote emote;
+                    if (firstString.StartsWith('<') && firstString.EndsWith('>'))
+                    {
+                        Emote.TryParse(firstString, out Emote e);
+                        emote = e;
                     }
                     else
                     {
-                        IEmote emote;
-                        if (firstString.StartsWith('<') && firstString.EndsWith('>'))
-                        {
-                            Emote.TryParse(firstString, out Emote e);
-                            emote = e;
-                        }
-                        else
-                        {
-                            emote = new Emoji(EmojiOne.EmojiOne.ShortnameToUnicode(firstString));
-                        }
-
-                        if (emote != null)
-                            emotes.Add(emote);
+                        emote = new Emoji(EmojiOne.EmojiOne.ShortnameToUnicode(firstString));
                     }
+
+                    if (emote != null)
+                        emotes.Add(emote);
                 }
-                embed = _embedService.GetInfoEmbed(question, string.Concat(options));
             }
 
-            var msg = await ReplyAsync(embed: embed);
+            await Context.Message.DeleteAsync();
+            IUserMessage msg;
+            var newOptions = options.Where(str => str.Split(' ', StringSplitOptions.RemoveEmptyEntries).Length == 1).ToArray();
+            if (newOptions.Length == options.Length)
+                msg = await ReplyAsync($"**{question}**");
+            else
+                msg = await ReplyAsync($"**{question}**\n{string.Concat(options.Select(o => o + "\n"))}");
             await msg.AddReactionsAsync(emotes.ToArray());
         }
     }

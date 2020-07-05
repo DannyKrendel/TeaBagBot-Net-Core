@@ -8,7 +8,6 @@ using TeaBagBot.DataAccess.Models;
 
 namespace TeaBagBot.Modules
 {
-    [RequirePermissions(PermissionGroup.Admin)]
     public class AdminModule : ModuleBase
     {
         private readonly DiscordSocketClient _client;
@@ -25,9 +24,7 @@ namespace TeaBagBot.Modules
             _configRepository = configRepository;
         }
 
-        [Command("prefix")]
-        [Alias("префикс")]
-        [Summary("Позволяет менять перфикс бота.\nПример: prefix <новый префикс>")]
+        [TeaBagCommand, Aliases, Description, UserPermission]
         public async Task Prefix(string newPrefix = null)
         {
             var config = await _configRepository.FindOneAsync(c => c.GuildId == Context.Guild.Id);
