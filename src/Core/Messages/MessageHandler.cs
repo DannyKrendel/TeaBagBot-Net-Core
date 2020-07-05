@@ -33,7 +33,7 @@ namespace TeaBagBot.Messages
             var msg = message as SocketUserMessage;
             int argPos = 0;
 
-            if (msg.MentionedUsers.Contains(_client.CurrentUser))
+            if (msg.MentionedUsers.FirstOrDefault(u => u.Id == _client.CurrentUser.Id) != null)
             {
                 string rawResponse = await _responseService.GetRandomResponseByMessageAsync(msg.Content.Substring(argPos));
                 if (string.IsNullOrEmpty(rawResponse) == false)

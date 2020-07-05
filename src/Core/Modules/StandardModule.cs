@@ -9,6 +9,8 @@ using TeaBagBot.Messages;
 using TeaBagBot.Attributes;
 using TeaBagBot.Services;
 using TeaBagBot.DataAccess.Models;
+using System.Text.RegularExpressions;
+using System.Collections.Generic;
 
 namespace TeaBagBot.Modules
 {
@@ -159,26 +161,87 @@ namespace TeaBagBot.Modules
             await ReplyAsync(embed: embed);
         }
 
-        [Command("game")]
-        [Alias("игра")]
-        public async Task Game([Remainder] string gameTitle)
+        [Command("poll")]
+        [Alias("vote", "опрос")]
+        public async Task Poll([Remainder]string message)
         {
             Embed embed = null;
-            var gameInfo = await _gameListService.FindGameAsync(gameTitle);
+            var emotes = new List<IEmote>();
+            var args = Regex.Split(message, @"^\'|\'\s\'|\'+$", RegexOptions.Multiline).Where(s => !string.IsNullOrEmpty(s)).ToArray();
+            var question = args[0];
+            var options = args.Skip(1).Select(o => o + "\n").ToArray();
 
-            if (gameInfo == null)
+            if (args.Length <= 1)
             {
-                embed = _embedService.GetErrorEmbed("Ошибка!", $"Игра \"{gameTitle}\" не найдена.");
+                embed = _embedService.GetErrorEmbed("Ошибка!", $"Неверное использование команды. Напишите `help poll`");
             }
             else
             {
-                string content = $"Статус: {gameInfo.Status}\nОписание: {gameInfo.Description}";
-                if (string.IsNullOrEmpty(gameInfo.Url) == false)
-                    content += $"\nПлейлист: {gameInfo.Url}";
-                embed = _embedService.GetInfoEmbed(gameInfo.Name, content, url: gameInfo.Url);
+                for (int i = 0; i < options.Length; i++)
+                {
+                    string firstString = new string(options[i].TakeWhile(c => c != ' ').ToArray());
+
+                    if (firstString.Length > 0 && int.TryParse(firstString.TakeWhile(c => char.IsDigit(c)).ToArray(), out int number) && number >= 0 && number <= 10)
+                    {
+                        switch (number)
+                        {
+                            case 0:
+                                emotes.Add(new Emoji("0\u20e3"));
+                                break;
+                            case 1:
+                                emotes.Add(new Emoji("1\u20e3"));
+                                break;
+                            case 2:
+                                emotes.Add(new Emoji("2\u20e3"));
+                                break;
+                            case 3:
+                                emotes.Add(new Emoji("3\u20e3"));
+                                break;
+                            case 4:
+                                emotes.Add(new Emoji("4\u20e3"));
+                                break;
+                            case 5:
+                                emotes.Add(new Emoji("5\u20e3"));
+                                break;
+                            case 6:
+                                emotes.Add(new Emoji("6\u20e3"));
+                                break;
+                            case 7:
+                                emotes.Add(new Emoji("7\u20e3"));
+                                break;
+                            case 8:
+                                emotes.Add(new Emoji("8\u20e3"));
+                                break;
+                            case 9:
+                                emotes.Add(new Emoji("9\u20e3"));
+                                break;
+                            case 10:
+                                emotes.Add(new Emoji("\uD83D\uDD1F"));
+                                break;
+                        }
+                    }
+                    else
+                    {
+                        IEmote emote;
+                        if (firstString.StartsWith('<') && firstString.EndsWith('>'))
+                        {
+                            Emote.TryParse(firstString, out Emote e);
+                            emote = e;
+                        }
+                        else
+                        {
+                            emote = new Emoji(EmojiOne.EmojiOne.ShortnameToUnicode(firstString));
+                        }
+
+                        if (emote != null)
+                            emotes.Add(emote);
+                    }
+                }
+                embed = _embedService.GetInfoEmbed(question, string.Concat(options));
             }
 
-            await ReplyAsync(embed: embed);
+            var msg = await ReplyAsync(embed: embed);
+            await msg.AddReactionsAsync(emotes.ToArray());
         }
     }
 }
