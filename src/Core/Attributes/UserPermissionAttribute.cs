@@ -14,7 +14,7 @@ namespace TeaBagBot.Attributes
     public sealed class UserPermissionAttribute : RequireUserPermissionAttribute
     {
         public UserPermissionAttribute([CallerMemberName] string memberName = "")
-            : base(TeaBagCommandService.GetCommand<MongoRepository<TeaBagCommand>>(memberName).Permissions)
+            : base(TeaBagCommandService.GetPermissions<MongoRepository<BotConfig>>(memberName))
         {
 
         }

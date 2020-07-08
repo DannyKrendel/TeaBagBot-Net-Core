@@ -67,7 +67,7 @@ namespace TeaBagBot.Services
                 }
 
                 var embed = _embedService.GetErrorEmbed("Ошибка!", reason);
-                await context.Channel.SendMessageAsync(embed: embed);
+                await context.Channel.SendMessageAsync(embed: embed as Embed);
             }
 
             if (result.Error.HasValue == false)

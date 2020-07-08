@@ -30,12 +30,10 @@ namespace TeaBagBot.Messages
 
         public async Task HandleMessageAsync(SocketMessage message)
         {
-            var msg = message as SocketUserMessage;
-            int argPos = 0;
-
-            if (msg.MentionedUsers.FirstOrDefault(u => u.Id == _client.CurrentUser.Id) != null)
+            if (message.MentionedUsers.FirstOrDefault(u => u.Id == _client.CurrentUser.Id) != null)
             {
-                string rawResponse = await _responseService.GetRandomResponseByMessageAsync(msg.Content.Substring(argPos));
+                var msg = message as SocketUserMessage;
+                string rawResponse = await _responseService.GetRandomResponseByMessageAsync(msg.Content);
                 if (string.IsNullOrEmpty(rawResponse) == false)
                 {
                     string response = _responseParser.Parse(rawResponse, new TeaBagMessageContext(msg));

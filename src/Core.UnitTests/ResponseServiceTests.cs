@@ -43,7 +43,7 @@ namespace TeaBagBot.UnitTests
             repoMock.Setup(r => r.AsQueryable())
                 .Returns(responses.AsQueryable());
             repoMock.Setup(r => r.FindOneAsync(It.IsAny<Expression<Func<ResponseInfo, bool>>>()))
-                .Returns((Expression<Func<ResponseInfo, bool>> x) => { return Task.FromResult(responses.FirstOrDefault(x.Compile())); });
+                .Returns((Expression<Func<ResponseInfo, bool>> x) => Task.FromResult(responses.FirstOrDefault(x.Compile())));
 
             _responseService = new ResponseService(repoMock.Object);
         }

@@ -15,12 +15,8 @@ namespace TeaBagBot.DataAccess
     {
         private readonly IMongoCollection<TEntity> _collection;
 
-        public MongoRepository(IMongoDbSettings settings)
+        public MongoRepository(IMongoClient client, IMongoDbSettings settings)
         {
-            MongoClient client = string.IsNullOrEmpty(settings.ConnectionString) ?
-                new MongoClient() :
-                new MongoClient(settings.ConnectionString);
-
             var database = client.GetDatabase(settings.DatabaseName);
             _collection = database.GetCollection<TEntity>(GetCollectionName());
         }

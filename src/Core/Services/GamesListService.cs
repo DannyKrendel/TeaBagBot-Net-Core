@@ -21,7 +21,6 @@ namespace TeaBagBot.Services
 
         public async Task<GameInfo> FindGameAsync(string name)
         {
-            GameInfo gameInfo = null;
             var sheet = await _googleSheetsService.GetSheetAsync(_spreadsheetId, _sheet);
 
             var data = sheet.Data.FirstOrDefault();
@@ -29,22 +28,41 @@ namespace TeaBagBot.Services
             if (data == null)
                 return null;
 
+            // 0 = perfect match, 1 = partial match, etc
+            var matches = new Dictionary<GameInfo, int>();
+
             foreach (var rowData in data.RowData)
             {
-                if (rowData.Values[0].FormattedValue.ToLower() == name.ToLower())
+                string actualName = rowData.Values[0].FormattedValue;
+
+                if (actualName.ToLower() == name.ToLower())
                 {
-                    gameInfo = new GameInfo
+                    matches.Add(new GameInfo
                     {
                         Name = rowData.Values[0].FormattedValue,
                         Status = rowData.Values[1].FormattedValue,
                         Description = rowData.Values[2].FormattedValue,
                         Url = string.IsNullOrEmpty(rowData.Values[0].Hyperlink) ? null : rowData.Values[0].Hyperlink
-                    };
+                    }, 0);
+                    break;
+                }
+                else if (actualName.ToLower().Contains(name.ToLower()))
+                {
+                    matches.Add(new GameInfo
+                    {
+                        Name = rowData.Values[0].FormattedValue,
+                        Status = rowData.Values[1].FormattedValue,
+                        Description = rowData.Values[2].FormattedValue,
+                        Url = string.IsNullOrEmpty(rowData.Values[0].Hyperlink) ? null : rowData.Values[0].Hyperlink
+                    }, 1);
                     break;
                 }
             }
 
-            return gameInfo;
+            if (matches.Count == 0)
+                return null;
+
+            return matches.OrderBy(m => m.Value).First().Key;
         }
     }
 }

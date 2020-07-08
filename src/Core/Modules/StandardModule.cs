@@ -105,8 +105,6 @@ namespace TeaBagBot.Modules
         [TeaBagCommand, Aliases, Description, UserPermission]
         public async Task Say([Remainder] string message)
         {
-            var embed = _embedService.GetInfoEmbed(message, "");
-
             await Context.Message.DeleteAsync();
             await ReplyAsync(message);
         }

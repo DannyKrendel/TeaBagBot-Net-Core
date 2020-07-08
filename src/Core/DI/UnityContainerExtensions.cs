@@ -10,6 +10,7 @@ using TeaBagBot.Messages;
 using TeaBagBot.Services;
 using Discord;
 using TeaBagBot.DataAccess;
+using MongoDB.Driver;
 
 namespace TeaBagBot.DI
 {
@@ -49,7 +50,14 @@ namespace TeaBagBot.DI
             container.RegisterSingleton<GamesListService>();
             container.RegisterFactory<IMongoDbSettings>(x => container.Resolve<SettingsService>().Load().MongoDbSettings);
             container.RegisterType(typeof(IRepository<>), typeof(MongoRepository<>));
+            container.RegisterFactory<IMongoClient>(x => {
+                var settings = container.Resolve<IMongoDbSettings>();
+                return (string.IsNullOrEmpty(settings.ConnectionString) ?
+                new MongoClient() :
+                new MongoClient(settings.ConnectionString));
+                });
             container.RegisterSingleton<LinkService>();
+            container.RegisterSingleton<PaginationService>();
         }
     }
 }

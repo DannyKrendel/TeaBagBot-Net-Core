@@ -5,6 +5,7 @@ using TeaBagBot.Attributes;
 using TeaBagBot.Services;
 using TeaBagBot.DataAccess;
 using TeaBagBot.DataAccess.Models;
+using Discord;
 
 namespace TeaBagBot.Modules
 {
@@ -43,6 +44,39 @@ namespace TeaBagBot.Modules
 
                 await ReplyAsync($"{Context.User.Mention}, префикс изменён на `{newPrefix}`");
             }
+        }
+
+        [TeaBagCommand, Aliases, Description, UserPermission]
+        public async Task Perm(string commandName, int? permissions = null)
+        {
+            Embed embed = null;
+
+            if (string.IsNullOrEmpty(commandName))
+            {
+                embed = _embedService.GetErrorEmbed("Ошибка!", $"Неверное использование команды. Напишите `help perm`");
+            }
+            else
+            {
+                var command = _commandService.GetCommand(commandName);
+                if (command == null)
+                {
+                    embed = _embedService.GetErrorEmbed("Ошибка!", $"Команды `{commandName}` не найдено.");
+                }
+                else
+                {
+                    if (permissions == null)
+                    {
+                        embed = _embedService.GetInfoEmbed($"Права команды {commandName}: ", _commandService.GetPermissions(command.Name).ToString());
+                    }
+                    else
+                    {
+                        await _commandService.ChangeCommandPermissions(commandName, permissions.Value);
+                        embed = _embedService.GetInfoEmbed($"Права команды {commandName} успешно изменены.");
+                    }
+                }
+            }
+
+            await ReplyAsync(embed: embed);
         }
     }
 }
